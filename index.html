@@ -4,389 +4,1166 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>ReseñaEscolar - Evalúa Colegios</title>
+    <title>ReseñaEscolar</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* RESET Y BASE */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
         }
 
-        html {
-            font-size: 16px;
-            -webkit-text-size-adjust: 100%;
-            -ms-text-size-adjust: 100%;
+        :root {
+            --facebook-blue: #1877f2;
+            --facebook-blue-dark: #166fe5;
+            --facebook-blue-light: #e7f3ff;
+            --bg-primary: #f0f2f5;
+            --bg-secondary: #ffffff;
+            --text-primary: #050505;
+            --text-secondary: #65676b;
+            --divider: #e4e6eb;
+            --hover-overlay: #f2f3f5;
+            --shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            --shadow-medium: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --shadow-large: 0 8px 16px rgba(0, 0, 0, 0.15);
+            --admin-color: #dc3545;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            background-attachment: fixed;
-            min-height: 100vh;
-            padding: 10px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
 
-        @media (min-width: 768px) {
-            body {
-                padding: 20px;
-            }
+        /* HEADER ESTILO FACEBOOK */
+        .fb-header {
+            background: var(--bg-secondary);
+            box-shadow: var(--shadow-medium);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 0;
         }
 
-        .container {
+        .fb-header-inner {
             max-width: 1400px;
             margin: 0 auto;
-            width: 100%;
-        }
-
-        /* HEADER */
-        header {
-            background: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            margin-bottom: 20px;
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 16px;
             gap: 15px;
         }
 
-        @media (min-width: 768px) {
-            header {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-                padding: 20px 30px;
-                border-radius: 15px;
-                margin-bottom: 30px;
-            }
-        }
-
-        .header-left {
-            text-align: center;
-        }
-
-        @media (min-width: 768px) {
-            .header-left {
-                flex: 1;
-                text-align: left;
-            }
-        }
-
-        h1 {
-            color: #667eea;
-            font-size: 1.8em;
-            margin-bottom: 5px;
-            word-wrap: break-word;
-        }
-
-        @media (min-width: 768px) {
-            h1 {
-                font-size: 2.5em;
-            }
-        }
-
-        .subtitle {
-            color: #666;
-            font-size: 0.9em;
-        }
-
-        @media (min-width: 768px) {
-            .subtitle {
-                font-size: 1em;
-            }
-        }
-
-        .header-right {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            width: 100%;
-        }
-
-        @media (min-width: 768px) {
-            .header-right {
-                flex-direction: row;
-                gap: 15px;
-                width: auto;
-            }
-        }
-
-        .user-info {
+        .fb-logo {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 10px 15px;
-            background: #f0f0f0;
-            border-radius: 25px;
-            width: 100%;
-            justify-content: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--facebook-blue);
+            text-decoration: none;
         }
 
-        @media (min-width: 768px) {
-            .user-info {
-                width: auto;
-            }
+        .fb-logo i {
+            font-size: 40px;
         }
 
-        .user-avatar {
-            width: 35px;
-            height: 35px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1em;
-            flex-shrink: 0;
-        }
-
-        @media (min-width: 768px) {
-            .user-avatar {
-                width: 40px;
-                height: 40px;
-                font-size: 1.2em;
-            }
-        }
-
-        .user-name {
-            font-weight: 600;
-            color: #333;
-            font-size: 0.95em;
-        }
-
-        .logout-btn {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9em;
-            transition: all 0.3s;
-            width: 100%;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        @media (min-width: 768px) {
-            .logout-btn {
-                width: auto;
-                padding: 8px 15px;
-            }
-        }
-
-        .logout-btn:hover,
-        .logout-btn:active {
-            background: #c82333;
-            transform: scale(1.05);
-        }
-
-        /* BÚSQUEDA */
-        .search-section {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            margin-bottom: 20px;
-        }
-
-        @media (min-width: 768px) {
-            .search-section {
-                padding: 25px;
-                border-radius: 15px;
-                margin-bottom: 30px;
-            }
-        }
-
-        .search-box {
+        .fb-search {
+            flex: 1;
+            max-width: 600px;
             position: relative;
         }
 
-        .search-input {
+        .fb-search-input {
             width: 100%;
-            padding: 12px 45px 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 25px;
+            padding: 10px 16px;
+            background: var(--bg-primary);
+            border: none;
+            border-radius: 50px;
             font-size: 15px;
-            transition: all 0.3s;
-            -webkit-appearance: none;
-            appearance: none;
-        }
-
-        @media (min-width: 768px) {
-            .search-input {
-                padding: 15px 50px 15px 20px;
-                font-size: 16px;
-            }
-        }
-
-        .search-input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
-        .search-icon {
+        .fb-search-input:focus {
+            background: var(--bg-secondary);
+            box-shadow: 0 0 0 2px var(--facebook-blue-light);
+        }
+
+        /* DROPDOWN DE BÚSQUEDA */
+        .fb-search-dropdown {
             position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 1.3em;
-            color: #667eea;
-            pointer-events: none;
-        }
-
-        @media (min-width: 768px) {
-            .search-icon {
-                right: 20px;
-                font-size: 1.5em;
-            }
-        }
-
-        .search-results {
-            margin-top: 15px;
-            display: none;
+            top: 100%;
+            left: 0;
+            right: 0;
+            margin-top: 8px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            box-shadow: var(--shadow-large);
             max-height: 400px;
             overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
+            display: none;
+            z-index: 2000;
         }
 
-        .search-result-item {
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            margin-bottom: 10px;
+        .fb-search-dropdown.show {
+            display: block;
+        }
+
+        .fb-search-result {
+            padding: 12px 16px;
             cursor: pointer;
-            transition: all 0.3s;
-            border: 2px solid transparent;
-            -webkit-tap-highlight-color: transparent;
+            transition: background 0.2s;
+            border-bottom: 1px solid var(--divider);
         }
 
-        .search-result-item:hover,
-        .search-result-item:active {
-            background: #e9ecef;
-            border-color: #667eea;
-            transform: translateX(5px);
+        .fb-search-result:last-child {
+            border-bottom: none;
         }
 
-        .search-result-content {
+        .fb-search-result:hover {
+            background: var(--hover-overlay);
+        }
+
+        .fb-search-result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .fb-search-result-name {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 15px;
+        }
+
+        .fb-search-result-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--facebook-blue);
+            font-weight: 700;
+        }
+
+        .fb-search-result-info {
+            font-size: 13px;
+            color: var(--text-secondary);
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 2px;
+        }
+
+        .fb-search-no-results {
+            padding: 20px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .fb-user-menu {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fb-user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 50px;
+            background: var(--bg-primary);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .fb-user-info:hover {
+            background: var(--divider);
+        }
+
+        .fb-user-info.admin {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+        }
+
+        .fb-user-info.admin .fb-avatar {
+            background: white;
+            color: #dc3545;
+        }
+
+        .fb-user-info.admin .fb-username {
+            color: white;
+        }
+
+        .fb-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--facebook-blue), #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .fb-username {
+            font-weight: 600;
+            color: var(--text-primary);
+            display: none;
         }
 
         @media (min-width: 768px) {
-            .search-result-content {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: start;
+            .fb-username {
+                display: block;
             }
         }
 
-        .search-result-info {
+        .fb-admin-btn {
+            padding: 8px 16px;
+            background: var(--admin-color);
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .fb-admin-btn:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .fb-logout-btn {
+            padding: 8px 16px;
+            background: var(--bg-primary);
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .fb-logout-btn:hover {
+            background: var(--divider);
+        }
+
+        /* CONTENEDOR PRINCIPAL */
+        .fb-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        @media (min-width: 1024px) {
+            .fb-container {
+                grid-template-columns: 360px 1fr;
+                padding: 20px 16px;
+            }
+        }
+
+        /* PANEL DE ADMINISTRACIÓN */
+        .admin-panel {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .admin-panel-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--divider);
+            margin-bottom: 20px;
+        }
+
+        .admin-panel-header i {
+            font-size: 32px;
+            color: var(--admin-color);
+        }
+
+        .admin-panel-header h2 {
+            font-size: 24px;
+            color: var(--text-primary);
+        }
+
+        .admin-tabs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .admin-tab-btn {
+            padding: 12px 20px;
+            background: var(--bg-primary);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .admin-tab-btn:hover {
+            background: var(--divider);
+        }
+
+        .admin-tab-btn.active {
+            background: var(--admin-color);
+            color: white;
+            border-color: var(--admin-color);
+        }
+
+        .admin-tab-content {
+            display: none;
+        }
+
+        .admin-tab-content.active {
+            display: block;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        .admin-table th,
+        .admin-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--divider);
+        }
+
+        .admin-table th {
+            background: var(--bg-primary);
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .admin-table tr:hover {
+            background: var(--hover-overlay);
+        }
+
+        .admin-action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-right: 6px;
+        }
+
+        .admin-action-btn.edit {
+            background: var(--facebook-blue);
+            color: white;
+        }
+
+        .admin-action-btn.edit:hover {
+            background: var(--facebook-blue-dark);
+        }
+
+        .admin-action-btn.delete {
+            background: var(--admin-color);
+            color: white;
+        }
+
+        .admin-action-btn.delete:hover {
+            background: #c82333;
+        }
+
+        .admin-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .admin-badge.admin {
+            background: #dc3545;
+            color: white;
+        }
+
+        .admin-badge.parent {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .admin-badge.teacher {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        /* PANEL IZQUIERDO - CREAR PUBLICACIÓN */
+        .fb-create-post {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+        }
+
+        @media (min-width: 1024px) {
+            .fb-create-post {
+                position: sticky;
+                top: 72px;
+                max-height: calc(100vh - 88px);
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+            }
+        }
+
+        .fb-create-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--divider);
+        }
+
+        .fb-create-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .fb-create-body {
+            padding: 16px;
+            overflow-y: auto;
+            overflow-x: hidden;
             flex: 1;
         }
 
-        .search-result-info h4 {
-            color: #333;
-            margin-bottom: 5px;
-            font-size: 1em;
+        .fb-create-body::-webkit-scrollbar {
+            width: 8px;
         }
 
-        @media (min-width: 768px) {
-            .search-result-info h4 {
-                font-size: 1.1em;
-            }
+        .fb-create-body::-webkit-scrollbar-track {
+            background: transparent;
         }
 
-        .search-result-info p {
-            color: #666;
-            font-size: 0.85em;
-            margin-bottom: 5px;
+        .fb-create-body::-webkit-scrollbar-thumb {
+            background: var(--divider);
+            border-radius: 4px;
         }
 
-        .search-result-details {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            margin-top: 8px;
+        .fb-create-body::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
         }
 
-        @media (min-width: 768px) {
-            .search-result-details {
-                flex-direction: row;
-                gap: 15px;
-                flex-wrap: wrap;
-            }
+        .fb-create-footer {
+            padding: 12px 16px;
+            border-top: 1px solid var(--divider);
         }
 
-        .search-result-detail {
-            font-size: 0.8em;
-            color: #555;
+        .fb-form-group {
+            margin-bottom: 16px;
+        }
+
+        .fb-label {
+            display: block;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .fb-input,
+        .fb-textarea,
+        .fb-select {
+            width: 100%;
+            padding: 10px 12px;
+            background: var(--bg-primary);
+            border: 1px solid var(--divider);
+            border-radius: 6px;
+            font-size: 15px;
+            font-family: inherit;
+            color: var(--text-primary);
+            transition: all 0.2s;
+        }
+
+        .fb-input:focus,
+        .fb-textarea:focus,
+        .fb-select:focus {
+            outline: none;
+            background: var(--bg-secondary);
+            border-color: var(--facebook-blue);
+            box-shadow: 0 0 0 2px var(--facebook-blue-light);
+        }
+
+        .fb-input:read-only {
+            background: var(--divider);
+            cursor: not-allowed;
+        }
+
+        .fb-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .fb-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2365676b' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px;
+        }
+
+        .fb-badge {
+            display: none;
+            background: var(--facebook-blue-light);
+            color: var(--facebook-blue);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            border: 2px solid var(--facebook-blue);
+        }
+
+        .fb-badge.show {
             display: flex;
             align-items: center;
-            gap: 5px;
+            justify-content: space-between;
         }
 
-        .search-result-rating {
+        .fb-badge button {
+            background: var(--facebook-blue);
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+
+        .fb-badge button:hover {
+            background: var(--facebook-blue-dark);
+        }
+
+        .fb-school-info-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .fb-school-info-box.show {
+            display: block;
+        }
+
+        .fb-school-info-box h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #856404;
+            margin-bottom: 12px;
+        }
+
+        /* ESTRELLAS */
+        .fb-stars {
+            display: flex;
+            gap: 4px;
+            justify-content: center;
+            padding: 8px 0;
+        }
+
+        @media (min-width: 768px) {
+            .fb-stars {
+                justify-content: flex-start;
+            }
+        }
+
+        .fb-star {
+            font-size: 32px;
+            color: var(--divider);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .fb-star:hover,
+        .fb-star.active {
+            color: #ffc107;
+            transform: scale(1.1);
+        }
+
+        /* CHECKBOXES */
+        .fb-checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .fb-checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .fb-checkbox-item:hover {
+            background: var(--hover-overlay);
+        }
+
+        .fb-checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--facebook-blue);
+        }
+
+        .fb-checkbox-item label {
+            cursor: pointer;
+            font-size: 15px;
+            margin: 0;
+        }
+
+        /* BOTÓN PRINCIPAL */
+        .fb-btn-primary {
+            width: 100%;
+            padding: 10px 16px;
+            background: var(--facebook-blue);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .fb-btn-primary:hover {
+            background: var(--facebook-blue-dark);
+        }
+
+        .fb-btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        /* FEED - PANEL DERECHO */
+        .fb-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* FILTROS */
+        .fb-filters {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 16px;
+        }
+
+        .fb-filters h3 {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .fb-filter-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .fb-filter-btn {
+            padding: 8px 16px;
+            background: var(--bg-primary);
+            border: none;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .fb-filter-btn:hover {
+            background: var(--divider);
+        }
+
+        .fb-filter-btn.active {
+            background: var(--facebook-blue-light);
+            color: var(--facebook-blue);
+        }
+
+        /* POST CARD */
+        .fb-post {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .fb-post-header {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+        }
+
+        .fb-post-school-info h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .fb-post-school-location {
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .fb-post-rating {
+            text-align: right;
+        }
+
+        .fb-post-rating-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--facebook-blue);
+            line-height: 1;
+        }
+
+        .fb-post-rating-stars {
+            color: #ffc107;
+            font-size: 14px;
+        }
+
+        /* INFORMACIÓN DE CONTACTO */
+        .fb-contact-section {
+            padding: 0 16px 16px;
+            border-bottom: 1px solid var(--divider);
+        }
+
+        .fb-contact-items {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        @media (min-width: 768px) {
+            .fb-contact-items {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+
+        .fb-contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--bg-primary);
+            border-radius: 6px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .fb-contact-item i {
+            color: var(--facebook-blue);
+        }
+
+        .fb-contact-item a {
+            color: var(--facebook-blue);
+            text-decoration: none;
+        }
+
+        .fb-contact-item a:hover {
+            text-decoration: underline;
+        }
+
+        /* ESTADÍSTICAS */
+        .fb-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            padding: 16px;
+            border-bottom: 1px solid var(--divider);
+        }
+
+        .fb-stat-box {
             text-align: center;
-            padding: 10px;
-            background: white;
+            padding: 12px;
+            background: var(--bg-primary);
             border-radius: 8px;
         }
 
-        @media (min-width: 768px) {
-            .search-result-rating {
-                text-align: right;
-                background: transparent;
-                padding: 0;
-            }
+        .fb-stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--facebook-blue);
         }
 
-        .search-rating-number {
-            font-size: 1.3em;
-            font-weight: bold;
-            color: #667eea;
+        .fb-stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
         }
 
-        @media (min-width: 768px) {
-            .search-rating-number {
-                font-size: 1.5em;
-            }
-        }
-
-        .search-rating-stars {
-            color: #ffd700;
-            font-size: 0.85em;
+        /* GRÁFICOS */
+        .fb-charts {
+            padding: 16px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            border-bottom: 1px solid var(--divider);
         }
 
         @media (min-width: 768px) {
-            .search-rating-stars {
-                font-size: 0.9em;
+            .fb-charts {
+                grid-template-columns: 1fr 1fr;
             }
+        }
+
+        .fb-chart-box {
+            background: var(--bg-primary);
+            padding: 16px;
+            border-radius: 8px;
+        }
+
+        .fb-chart-box h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        /* COMENTARIOS */
+        .fb-comments-section {
+            padding: 16px;
+        }
+
+        .fb-comments-header {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .fb-comment {
+            margin-bottom: 12px;
+        }
+
+        .fb-comment-wrapper {
+            display: flex;
+            gap: 8px;
+        }
+
+        .fb-comment-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--facebook-blue), #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .fb-comment-avatar.anonymous {
+            background: linear-gradient(135deg, #ffc107, #ff9800);
+        }
+
+        .fb-comment-content {
+            flex: 1;
+        }
+
+        .fb-comment-bubble {
+            background: var(--bg-primary);
+            padding: 12px;
+            border-radius: 18px;
+            display: inline-block;
+            max-width: 100%;
+        }
+
+        .fb-comment.anonymous .fb-comment-bubble {
+            background: #fff3cd;
+        }
+
+        .fb-comment-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .fb-comment-author {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .fb-comment-badge {
+            font-size: 11px;
+            padding: 2px 8px;
+            background: var(--facebook-blue-light);
+            color: var(--facebook-blue);
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .fb-comment-badge.teacher {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .fb-comment-badge.parent {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .fb-comment-badge.anonymous {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .fb-comment-stars {
+            color: #ffc107;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .fb-comment-text {
+            font-size: 15px;
+            color: var(--text-primary);
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .fb-comment-recommend {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #28a745;
+        }
+
+        .fb-comment-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 4px;
+            padding-left: 12px;
+            font-size: 13px;
+        }
+
+        .fb-comment-date {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .fb-comment-action {
+            color: var(--text-secondary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .fb-comment-action:hover {
+            color: var(--facebook-blue);
+            text-decoration: underline;
+        }
+
+        .fb-comment-action.liked {
+            color: var(--facebook-blue);
+        }
+
+        .fb-comment-action.disliked {
+            color: #dc3545;
+        }
+
+        /* RESPUESTAS */
+        .fb-replies {
+            margin-left: 48px;
+            margin-top: 8px;
+        }
+
+        .fb-reply {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .fb-reply-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .fb-reply-content {
+            flex: 1;
+        }
+
+        .fb-reply-bubble {
+            background: var(--bg-primary);
+            padding: 8px 12px;
+            border-radius: 16px;
+            display: inline-block;
+        }
+
+        .fb-reply-author {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .fb-reply-text {
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+
+        .fb-reply-date {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            padding-left: 12px;
+        }
+
+        .fb-show-replies {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 48px;
+            margin-top: 8px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 4px 0;
+        }
+
+        .fb-show-replies:hover {
+            text-decoration: underline;
+        }
+
+        /* FORMULARIO DE RESPUESTA */
+        .fb-reply-form {
+            display: none;
+            margin-left: 48px;
+            margin-top: 8px;
+            background: var(--bg-primary);
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .fb-reply-form.show {
+            display: block;
+        }
+
+        .fb-reply-form textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--divider);
+            border-radius: 18px;
+            font-size: 15px;
+            font-family: inherit;
+            resize: none;
+            min-height: 60px;
+            margin-bottom: 8px;
+        }
+
+        .fb-reply-form-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+        .fb-btn-small {
+            padding: 6px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .fb-btn-small.primary {
+            background: var(--facebook-blue);
+            color: white;
+        }
+
+        .fb-btn-small.primary:hover {
+            background: var(--facebook-blue-dark);
+        }
+
+        .fb-btn-small.secondary {
+            background: var(--divider);
+            color: var(--text-primary);
+        }
+
+        .fb-btn-small.secondary:hover {
+            background: #d8dadf;
         }
 
         /* MODAL */
-        .modal {
+        .fb-modal {
             display: none;
             position: fixed;
-            z-index: 1000;
+            z-index: 2000;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            animation: fadeIn 0.3s;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.2s;
             overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
+        }
+
+        .fb-modal-content {
+            background: var(--bg-secondary);
+            margin: 5% auto;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: var(--shadow-large);
+            animation: slideUp 0.3s;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         @keyframes fadeIn {
@@ -394,29 +1171,9 @@
             to { opacity: 1; }
         }
 
-        .modal-content {
-            background-color: white;
-            margin: 20px auto;
-            padding: 0;
-            border-radius: 15px;
-            width: calc(100% - 20px);
-            max-width: 450px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            animation: slideIn 0.3s;
-            max-height: calc(100vh - 40px);
-            overflow-y: auto;
-        }
-
-        @media (min-width: 768px) {
-            .modal-content {
-                margin: 5% auto;
-                width: 90%;
-            }
-        }
-
-        @keyframes slideIn {
+        @keyframes slideUp {
             from {
-                transform: translateY(-50px);
+                transform: translateY(50px);
                 opacity: 0;
             }
             to {
@@ -425,357 +1182,263 @@
             }
         }
 
-        .modal-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 15px 15px 0 0;
+        .fb-modal-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--divider);
             position: relative;
+            text-align: center;
         }
 
-        @media (min-width: 768px) {
-            .modal-header {
-                padding: 25px;
-            }
+        .fb-modal-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
         }
 
-        .modal-header h2 {
-            margin: 0;
-            font-size: 1.5em;
-            padding-right: 40px;
-        }
-
-        @media (min-width: 768px) {
-            .modal-header h2 {
-                font-size: 1.8em;
-            }
-        }
-
-        .close {
+        .fb-modal-close {
             position: absolute;
-            right: 15px;
-            top: 15px;
-            color: white;
-            font-size: 28px;
-            font-weight: bold;
+            right: 16px;
+            top: 16px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            border: none;
             cursor: pointer;
-            width: 35px;
-            height: 35px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
-            transition: all 0.3s;
-            -webkit-tap-highlight-color: transparent;
+            transition: background 0.2s;
         }
 
-        @media (min-width: 768px) {
-            .close {
-                right: 20px;
-                top: 20px;
-            }
+        .fb-modal-close:hover {
+            background: var(--divider);
         }
 
-        .close:hover,
-        .close:active {
-            background: rgba(255,255,255,0.2);
-            transform: rotate(90deg);
+        .fb-modal-close i {
+            color: var(--text-secondary);
+            font-size: 20px;
         }
 
-        .modal-body {
+        .fb-modal-body {
             padding: 20px;
         }
 
-        @media (min-width: 768px) {
-            .modal-body {
-                padding: 30px;
-            }
-        }
-
-        .tab-buttons {
+        .fb-tabs {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 25px;
+            gap: 8px;
+            margin-bottom: 20px;
         }
 
-        .tab-btn {
-            padding: 12px;
-            background: #f0f0f0;
+        .fb-tab-btn {
+            padding: 10px;
+            background: var(--bg-primary);
             border: none;
-            border-radius: 8px;
-            cursor: pointer;
+            border-radius: 6px;
             font-size: 15px;
             font-weight: 600;
-            transition: all 0.3s;
-            -webkit-tap-highlight-color: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        @media (min-width: 768px) {
-            .tab-btn {
-                font-size: 16px;
-            }
+        .fb-tab-btn.active {
+            background: var(--facebook-blue-light);
+            color: var(--facebook-blue);
         }
 
-        .tab-btn.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .tab-content {
+        .fb-tab-content {
             display: none;
         }
 
-        .tab-content.active {
+        .fb-tab-content.active {
             display: block;
-            animation: fadeIn 0.3s;
         }
 
-        .form-group {
-            margin-bottom: 18px;
-        }
-
-        @media (min-width: 768px) {
-            .form-group {
-                margin-bottom: 20px;
-            }
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 600;
-            font-size: 0.95em;
-        }
-
-        input, textarea, select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
+        /* ALERTAS */
+        .fb-alert {
+            position: fixed;
+            top: 72px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3000;
+            padding: 12px 20px;
+            background: var(--bg-secondary);
+            box-shadow: var(--shadow-large);
             border-radius: 8px;
-            font-size: 15px;
-            transition: all 0.3s;
-            font-family: inherit;
-            -webkit-appearance: none;
-            appearance: none;
-        }
-
-        @media (min-width: 768px) {
-            input, textarea, select {
-                font-size: 14px;
-            }
-        }
-
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        select {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            padding-right: 35px;
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        button[type="submit"], .btn-primary {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        button[type="submit"]:hover,
-        button[type="submit"]:active,
-        .btn-primary:hover,
-        .btn-primary:active {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        /* MAIN CONTENT */
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-
-        @media (min-width: 1024px) {
-            .main-content {
-                grid-template-columns: 400px 1fr;
-                align-items: start;
-            }
-        }
-
-        /* FORMULARIO - PANEL IZQUIERDO MEJORADO */
-        .form-section {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             display: flex;
-            flex-direction: column;
-            height: auto;
+            align-items: center;
+            gap: 12px;
+            min-width: 300px;
+            animation: slideDown 0.3s;
         }
 
-        @media (min-width: 768px) {
-            .form-section {
-                border-radius: 15px;
+        @keyframes slideDown {
+            from {
+                transform: translateX(-50%) translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
             }
         }
 
-        @media (min-width: 1024px) {
-            .form-section {
-                position: -webkit-sticky;
-                position: sticky;
-                top: 20px;
-                max-height: calc(100vh - 40px);
-                overflow: hidden;
-            }
+        .fb-alert.success {
+            border-left: 4px solid #28a745;
         }
 
-        .form-section h2 {
-            color: #667eea;
-            font-size: 1.3em;
-            padding: 20px;
-            margin: 0;
-            border-bottom: 2px solid #f0f0f0;
-            flex-shrink: 0;
+        .fb-alert.error {
+            border-left: 4px solid #dc3545;
         }
 
-        @media (min-width: 768px) {
-            .form-section h2 {
-                font-size: 1.5em;
-                padding: 25px;
-            }
+        .fb-alert i {
+            font-size: 20px;
         }
 
-        .form-content-wrapper {
-            flex: 1;
-            overflow-y: auto;
-            overflow-x: hidden;
-            -webkit-overflow-scrolling: touch;
-            padding: 20px;
+        .fb-alert.success i {
+            color: #28a745;
         }
 
-        @media (min-width: 768px) {
-            .form-content-wrapper {
-                padding: 25px;
-            }
+        .fb-alert.error i {
+            color: #dc3545;
         }
 
-        /* Scrollbar personalizado para el formulario */
-        .form-content-wrapper::-webkit-scrollbar {
-            width: 6px;
+        /* EMPTY STATE */
+        .fb-empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
         }
 
-        .form-content-wrapper::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
+        .fb-empty-state i {
+            font-size: 64px;
+            color: var(--divider);
+            margin-bottom: 16px;
         }
 
-        .form-content-wrapper::-webkit-scrollbar-thumb {
-            background: #667eea;
-            border-radius: 10px;
+        .fb-empty-state h3 {
+            font-size: 20px;
+            color: var(--text-primary);
+            margin-bottom: 8px;
         }
 
-        .form-content-wrapper::-webkit-scrollbar-thumb:hover {
-            background: #5568d3;
-        }
-
-        .form-button-container {
-            padding: 15px 20px;
-            background: white;
-            border-top: 2px solid #f0f0f0;
-            flex-shrink: 0;
-            position: sticky;
-            bottom: 0;
-            z-index: 10;
-        }
-
-        @media (min-width: 768px) {
-            .form-button-container {
-                padding: 20px 25px;
-            }
-        }
-
-        .selected-school-badge {
-            background: #e7f3ff;
-            border: 2px solid #667eea;
-            padding: 12px;
+        /* LOGIN PROMPT */
+        .fb-login-prompt {
+            background: var(--bg-secondary);
             border-radius: 8px;
-            margin-bottom: 15px;
-            display: none;
+            box-shadow: var(--shadow);
+            padding: 40px 20px;
+            text-align: center;
         }
 
-        .selected-school-badge.show {
-            display: block;
+        .fb-login-prompt i {
+            font-size: 64px;
+            color: var(--facebook-blue);
+            margin-bottom: 20px;
         }
 
-        .selected-school-badge strong {
-            color: #667eea;
-            font-size: 0.9em;
-            display: block;
-            margin-bottom: 5px;
+        .fb-login-prompt h2 {
+            font-size: 24px;
+            color: var(--text-primary);
+            margin-bottom: 12px;
         }
 
-        .selected-school-badge span {
-            font-size: 0.95em;
+        .fb-login-prompt p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
         }
 
-        .selected-school-badge button {
-            background: #dc3545;
+        .fb-login-prompt button {
+            padding: 12px 32px;
+            background: var(--facebook-blue);
             color: white;
             border: none;
-            padding: 6px 12px;
-            border-radius: 5px;
+            border-radius: 6px;
+            font-size: 17px;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 0.8em;
-            margin-top: 8px;
-            -webkit-tap-highlight-color: transparent;
+            transition: all 0.2s;
         }
 
-        .school-info-fields {
-            display: none;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            margin-bottom: 15px;
+        .fb-login-prompt button:hover {
+            background: var(--facebook-blue-dark);
+            transform: scale(1.02);
         }
 
-        .school-info-fields.show {
+        small {
             display: block;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 6px;
         }
 
-        .school-info-fields h4 {
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 1em;
-        }
-
-        @media (min-width: 768px) {
-            .school-info-fields h4 {
-                font-size: 1.1em;
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .fb-header-inner {
+                padding: 8px;
             }
+
+            .fb-logo span {
+                display: none;
+            }
+
+            .fb-search {
+                display: none;
+            }
+
+            .fb-container {
+                padding: 12px 8px;
+            }
+
+            .fb-create-post {
+                position: relative;
+                top: 0;
+                max-height: none;
+            }
+
+            .fb-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-tabs {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-table {
+                font-size: 13px;
+            }
+
+            .admin-table th,
+            .admin-table td {
+                padding: 8px;
+            }
+        }
+
+        /* SCROLLBAR PERSONALIZADO */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--divider);
+            border-radius: 6px;
+            border: 3px solid var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
         }
 
         .form-row {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 15px;
+            gap: 12px;
         }
 
         @media (min-width: 768px) {
@@ -783,941 +1446,157 @@
                 grid-template-columns: 1fr 1fr;
             }
         }
-
-        .star-rating {
-            display: flex;
-            gap: 5px;
-            justify-content: center;
-        }
-
-        @media (min-width: 768px) {
-            .star-rating {
-                justify-content: flex-start;
-            }
-        }
-
-        .star {
-            font-size: 28px;
-            cursor: pointer;
-            color: #ddd;
-            transition: all 0.2s;
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-
-        @media (min-width: 768px) {
-            .star {
-                font-size: 30px;
-            }
-        }
-
-        .star:hover,
-        .star:active,
-        .star.active {
-            color: #ffd700;
-            transform: scale(1.1);
-        }
-
-        .checkbox-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .checkbox-item input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
-
-        .checkbox-item label {
-            margin: 0;
-            cursor: pointer;
-            font-size: 0.9em;
-        }
-
-        .anonymous-option {
-            background: #fff3cd;
-            border: 2px solid #ffc107;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        .anonymous-option label {
-            margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            font-size: 0.95em;
-        }
-
-        .anonymous-option input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-        }
-
-        /* RESEÑAS */
-        .reviews-section {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .filters {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        @media (min-width: 768px) {
-            .filters {
-                padding: 20px;
-                border-radius: 15px;
-            }
-        }
-
-        .filters h3 {
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 1.1em;
-        }
-
-        @media (min-width: 768px) {
-            .filters h3 {
-                font-size: 1.2em;
-            }
-        }
-
-        .filter-buttons {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        @media (min-width: 768px) {
-            .filter-buttons {
-                gap: 10px;
-            }
-        }
-
-        .filter-btn {
-            padding: 8px 12px;
-            background: #f0f0f0;
-            border: 2px solid #e0e0e0;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 13px;
-            -webkit-tap-highlight-color: transparent;
-            white-space: nowrap;
-        }
-
-        @media (min-width: 768px) {
-            .filter-btn {
-                padding: 8px 15px;
-                font-size: 14px;
-            }
-        }
-
-        .filter-btn.active {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-
-        .filter-btn:hover,
-        .filter-btn:active {
-            transform: translateY(-2px);
-        }
-
-        /* TARJETAS */
-        .school-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        @media (min-width: 768px) {
-            .school-card {
-                padding: 25px;
-                border-radius: 15px;
-            }
-        }
-
-        .school-header {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f0f0f0;
-        }
-
-        @media (min-width: 768px) {
-            .school-header {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: start;
-            }
-        }
-
-        .school-name {
-            font-size: 1.4em;
-            color: #333;
-            font-weight: 700;
-            word-wrap: break-word;
-        }
-
-        @media (min-width: 768px) {
-            .school-name {
-                font-size: 1.8em;
-            }
-        }
-
-        .school-location {
-            color: #666;
-            font-size: 0.85em;
-            margin-top: 5px;
-        }
-
-        @media (min-width: 768px) {
-            .school-location {
-                font-size: 0.9em;
-            }
-        }
-
-        .overall-rating {
-            text-align: center;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 10px;
-        }
-
-        @media (min-width: 768px) {
-            .overall-rating {
-                text-align: right;
-                background: transparent;
-                padding: 0;
-            }
-        }
-
-        .rating-number {
-            font-size: 2em;
-            color: #667eea;
-            font-weight: 700;
-        }
-
-        @media (min-width: 768px) {
-            .rating-number {
-                font-size: 2.5em;
-            }
-        }
-
-        .stars-display {
-            color: #ffd700;
-            font-size: 1em;
-        }
-
-        @media (min-width: 768px) {
-            .stars-display {
-                font-size: 1.2em;
-            }
-        }
-
-        .school-contact-info {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            margin: 15px 0;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-        }
-
-        @media (min-width: 768px) {
-            .school-contact-info {
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                gap: 15px;
-            }
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: start;
-            gap: 8px;
-            font-size: 0.85em;
-            color: #555;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-
-        @media (min-width: 768px) {
-            .contact-item {
-                font-size: 0.9em;
-            }
-        }
-
-        .contact-item strong {
-            color: #667eea;
-            flex-shrink: 0;
-        }
-
-        .contact-item a {
-            color: #667eea;
-            text-decoration: none;
-            word-break: break-all;
-        }
-
-        .contact-item a:hover,
-        .contact-item a:active {
-            text-decoration: underline;
-        }
-
-        /* ESTADÍSTICAS */
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin: 15px 0;
-        }
-
-        @media (min-width: 768px) {
-            .stats {
-                gap: 10px;
-            }
-        }
-
-        .stat-box {
-            background: #f8f9fa;
-            padding: 12px 8px;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        @media (min-width: 768px) {
-            .stat-box {
-                padding: 15px;
-            }
-        }
-
-        .stat-number {
-            font-size: 1.2em;
-            font-weight: 700;
-            color: #667eea;
-        }
-
-        @media (min-width: 768px) {
-            .stat-number {
-                font-size: 1.5em;
-            }
-        }
-
-        .stat-label {
-            font-size: 0.75em;
-            color: #666;
-            margin-top: 5px;
-        }
-
-        @media (min-width: 768px) {
-            .stat-label {
-                font-size: 0.85em;
-            }
-        }
-
-        /* GRÁFICOS */
-        .charts-container {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        @media (min-width: 768px) {
-            .charts-container {
-                grid-template-columns: 1fr 1fr;
-                gap: 20px;
-            }
-        }
-
-        .chart-box {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        @media (min-width: 768px) {
-            .chart-box {
-                padding: 20px;
-            }
-        }
-
-        .chart-box h4 {
-            color: #333;
-            margin-bottom: 15px;
-            text-align: center;
-            font-size: 0.95em;
-        }
-
-        @media (min-width: 768px) {
-            .chart-box h4 {
-                font-size: 1em;
-            }
-        }
-
-        .chart-canvas {
-            max-height: 200px;
-        }
-
-        @media (min-width: 768px) {
-            .chart-canvas {
-                max-height: 250px;
-            }
-        }
-
-        /* COMENTARIOS */
-        .comments-section {
-            margin-top: 20px;
-        }
-
-        .comments-section h3 {
-            font-size: 1.1em;
-            margin-bottom: 15px;
-        }
-
-        @media (min-width: 768px) {
-            .comments-section h3 {
-                font-size: 1.2em;
-            }
-        }
-
-        .comment {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            border-left: 4px solid #667eea;
-            transition: all 0.3s;
-        }
-
-        .comment.anonymous {
-            border-left-color: #ffc107;
-            background: #fffbf0;
-        }
-
-        .comment:active {
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-        }
-
-        .comment-header {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-
-        @media (min-width: 768px) {
-            .comment-header {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
-        }
-
-        .comment-author {
-            font-weight: 600;
-            color: #333;
-            font-size: 0.95em;
-        }
-
-        .comment-date {
-            color: #999;
-            font-size: 0.8em;
-        }
-
-        @media (min-width: 768px) {
-            .comment-date {
-                font-size: 0.85em;
-            }
-        }
-
-        .comment-type {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 15px;
-            font-size: 0.75em;
-            margin-right: 8px;
-        }
-
-        @media (min-width: 768px) {
-            .comment-type {
-                font-size: 0.8em;
-            }
-        }
-
-        .comment-type.teacher {
-            background: #e3f2fd;
-            color: #1976d2;
-        }
-
-        .comment-type.parent {
-            background: #f3e5f5;
-            color: #7b1fa2;
-        }
-
-        .comment-type.anonymous {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .comment-text {
-            color: #555;
-            line-height: 1.6;
-            margin: 10px 0;
-            font-size: 0.95em;
-            word-wrap: break-word;
-        }
-
-        .comment-rating {
-            color: #ffd700;
-            margin: 10px 0;
-            font-size: 0.95em;
-        }
-
-        .comment-footer {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-
-        @media (min-width: 768px) {
-            .comment-footer {
-                gap: 15px;
-            }
-        }
-
-        .like-button,
-        .dislike-button,
-        .reply-button {
-            background: none;
-            border: 1px solid #e0e0e0;
-            color: #666;
-            cursor: pointer;
-            font-size: 0.85em;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            padding: 8px 12px;
-            border-radius: 20px;
-            transition: all 0.3s;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        @media (min-width: 768px) {
-            .like-button,
-            .dislike-button,
-            .reply-button {
-                font-size: 0.9em;
-            }
-        }
-
-        .like-button:active,
-        .dislike-button:active,
-        .reply-button:active {
-            background: #f0f0f0;
-            transform: scale(1.05);
-        }
-
-        .like-button.liked {
-            color: #28a745;
-            border-color: #28a745;
-            background: #d4edda;
-        }
-
-        .dislike-button.disliked {
-            color: #dc3545;
-            border-color: #dc3545;
-            background: #f8d7da;
-        }
-
-        /* RESPUESTAS */
-        .replies-section {
-            margin-top: 15px;
-            padding-left: 15px;
-            border-left: 2px solid #e0e0e0;
-        }
-
-        @media (min-width: 768px) {
-            .replies-section {
-                padding-left: 30px;
-            }
-        }
-
-        .reply {
-            background: white;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        .reply-header {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            margin-bottom: 8px;
-        }
-
-        @media (min-width: 768px) {
-            .reply-header {
-                flex-direction: row;
-                justify-content: space-between;
-            }
-        }
-
-        .reply-author {
-            font-weight: 600;
-            color: #555;
-            font-size: 0.85em;
-        }
-
-        @media (min-width: 768px) {
-            .reply-author {
-                font-size: 0.9em;
-            }
-        }
-
-        .reply-date {
-            color: #999;
-            font-size: 0.75em;
-        }
-
-        @media (min-width: 768px) {
-            .reply-date {
-                font-size: 0.8em;
-            }
-        }
-
-        .reply-text {
-            color: #666;
-            font-size: 0.85em;
-            line-height: 1.5;
-            word-wrap: break-word;
-        }
-
-        @media (min-width: 768px) {
-            .reply-text {
-                font-size: 0.9em;
-            }
-        }
-
-        .reply-form {
-            display: none;
-            margin-top: 15px;
-            padding: 15px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .reply-form.show {
-            display: block;
-            animation: fadeIn 0.3s;
-        }
-
-        .reply-form textarea {
-            margin-bottom: 10px;
-            min-height: 80px;
-        }
-
-        .reply-form-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .reply-form-buttons button {
-            padding: 10px;
-        }
-
-        .btn-cancel {
-            background: #6c757d;
-        }
-
-        .btn-cancel:hover,
-        .btn-cancel:active {
-            background: #5a6268;
-        }
-
-        .show-replies-btn {
-            background: none;
-            border: none;
-            color: #667eea;
-            cursor: pointer;
-            font-size: 0.8em;
-            padding: 5px 0;
-            margin-top: 10px;
-            font-weight: 600;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        @media (min-width: 768px) {
-            .show-replies-btn {
-                font-size: 0.85em;
-            }
-        }
-
-        .show-replies-btn:active {
-            text-decoration: underline;
-        }
-
-        /* ESTADO VACÍO */
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: #999;
-        }
-
-        @media (min-width: 768px) {
-            .empty-state {
-                padding: 60px 20px;
-            }
-        }
-
-        .empty-state svg {
-            width: 80px;
-            height: 80px;
-            margin-bottom: 20px;
-            opacity: 0.5;
-        }
-
-        @media (min-width: 768px) {
-            .empty-state svg {
-                width: 100px;
-                height: 100px;
-            }
-        }
-
-        .empty-state h3 {
-            font-size: 1.1em;
-            margin-bottom: 10px;
-        }
-
-        @media (min-width: 768px) {
-            .empty-state h3 {
-                font-size: 1.3em;
-            }
-        }
-
-        /* ALERTAS */
-        .alert {
-            padding: 12px 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            animation: slideIn 0.3s;
-            font-size: 0.9em;
-        }
-
-        @media (min-width: 768px) {
-            .alert {
-                padding: 15px 20px;
-                font-size: 1em;
-            }
-        }
-
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border-left: 4px solid #28a745;
-        }
-
-        .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border-left: 4px solid #dc3545;
-        }
-
-        .login-prompt {
-            text-align: center;
-            padding: 30px 20px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        @media (min-width: 768px) {
-            .login-prompt {
-                padding: 40px;
-            }
-        }
-
-        .login-prompt h2 {
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-        }
-
-        @media (min-width: 768px) {
-            .login-prompt h2 {
-                font-size: 1.5em;
-            }
-        }
-
-        .login-prompt p {
-            font-size: 0.95em;
-        }
-
-        .login-prompt button {
-            margin-top: 20px;
-            padding: 12px 30px;
-            width: auto;
-        }
-
-        small {
-            display: block;
-            margin-top: 5px;
-            color: #666;
-            font-size: 0.8em;
-        }
-
-        @media (min-width: 768px) {
-            small {
-                font-size: 0.85em;
-            }
-        }
-
-        /* SCROLLBAR */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #667eea;
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #5568d3;
-        }
-
-        /* MEJORAS DE ACCESIBILIDAD */
-        *:focus {
-            outline: 2px solid #667eea;
-            outline-offset: 2px;
-        }
-
-        button:focus,
-        input:focus,
-        textarea:focus,
-        select:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
-        }
-
-        /* COMPATIBILIDAD CROSS-BROWSER */
-        @supports (-webkit-touch-callout: none) {
-            input, textarea, select {
-                font-size: 16px;
-            }
-        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- HEADER -->
-        <header>
-            <div class="header-left">
-                <h1>🏫 ReseñaEscolar</h1>
-                <p class="subtitle">Comparte tu experiencia y ayuda a otros a tomar mejores decisiones</p>
+    <!-- HEADER ESTILO FACEBOOK -->
+    <header class="fb-header">
+        <div class="fb-header-inner">
+            <a href="#" class="fb-logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>ReseñaEscolar</span>
+            </a>
+            
+            <div class="fb-search" id="searchSection">
+                <input type="text" class="fb-search-input" id="searchInput" placeholder="Buscar colegio...">
+                <div class="fb-search-dropdown" id="searchDropdown"></div>
             </div>
-            <div class="header-right" id="headerRight"></div>
-        </header>
 
-        <!-- BÚSQUEDA -->
-        <div class="search-section">
-            <div class="search-box">
-                <input type="text" class="search-input" id="searchInput" placeholder="🔍 Buscar colegio...">
-                <span class="search-icon">🔍</span>
-            </div>
-            <div class="search-results" id="searchResults"></div>
+            <div class="fb-user-menu" id="userMenu"></div>
         </div>
+    </header>
 
-        <!-- CONTENIDO PRINCIPAL -->
-        <div id="mainContent"></div>
-    </div>
+    <!-- CONTENEDOR PRINCIPAL -->
+    <div class="fb-container" id="mainContainer"></div>
 
     <!-- MODAL DE LOGIN/REGISTRO -->
-    <div id="authModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Bienvenido</h2>
-                <span class="close">&times;</span>
+    <div id="authModal" class="fb-modal">
+        <div class="fb-modal-content">
+            <div class="fb-modal-header">
+                <h2>Únete a ReseñaEscolar</h2>
+                <button class="fb-modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-            <div class="modal-body">
-                <div class="tab-buttons">
-                    <button class="tab-btn active" onclick="switchTab('login')">Iniciar Sesión</button>
-                    <button class="tab-btn" onclick="switchTab('register')">Registrarse</button>
+            <div class="fb-modal-body">
+                <div class="fb-tabs">
+                    <button class="fb-tab-btn active" onclick="switchTab('login')">Iniciar Sesión</button>
+                    <button class="fb-tab-btn" onclick="switchTab('register')">Registrarse</button>
                 </div>
 
-                <!-- LOGIN -->
-                <div id="loginTab" class="tab-content active">
+                <div id="loginTab" class="fb-tab-content active">
                     <form id="loginForm">
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" id="loginEmail" required placeholder="tu@email.com">
+                        <div class="fb-form-group">
+                            <label class="fb-label">Email</label>
+                            <input type="email" class="fb-input" id="loginEmail" required placeholder="tu@email.com">
                         </div>
-                        <div class="form-group">
-                            <label>Contraseña</label>
-                            <input type="password" id="loginPassword" required placeholder="••••••••">
+                        <div class="fb-form-group">
+                            <label class="fb-label">Contraseña</label>
+                            <input type="password" class="fb-input" id="loginPassword" required placeholder="Tu contraseña">
                         </div>
-                        <button type="submit">Iniciar Sesión</button>
+                        <button type="submit" class="fb-btn-primary">Iniciar Sesión</button>
                     </form>
                 </div>
 
-                <!-- REGISTRO -->
-                <div id="registerTab" class="tab-content">
+                <div id="registerTab" class="fb-tab-content">
                     <form id="registerForm">
-                        <div class="form-group">
-                            <label>Nombre Completo</label>
-                            <input type="text" id="registerName" required placeholder="Juan Pérez">
+                        <div class="fb-form-group">
+                            <label class="fb-label">Nombre Completo</label>
+                            <input type="text" class="fb-input" id="registerName" required placeholder="Juan Pérez">
                         </div>
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" id="registerEmail" required placeholder="tu@email.com">
+                        <div class="fb-form-group">
+                            <label class="fb-label">Email</label>
+                            <input type="email" class="fb-input" id="registerEmail" required placeholder="tu@email.com">
                         </div>
-                        <div class="form-group">
-                            <label>Contraseña</label>
-                            <input type="password" id="registerPassword" required placeholder="Mínimo 6 caracteres">
+                        <div class="fb-form-group">
+                            <label class="fb-label">Contraseña</label>
+                            <input type="password" class="fb-input" id="registerPassword" required placeholder="Mínimo 6 caracteres">
                         </div>
-                        <div class="form-group">
-                            <label>Tipo de Usuario</label>
-                            <select id="registerUserType" required>
-                                <option value="">Selecciona...</option>
-                                <option value="parent">Padre/Madre</option>
-                                <option value="teacher">Profesor/Empleado</option>
+                        <div class="fb-form-group">
+                            <label class="fb-label">Tipo de Usuario</label>
+                            <select class="fb-select" id="registerUserType" required>
+                                <option value="">Selecciona una opción...</option>
+                                <option value="parent">👨‍👩‍👧 Padre/Madre</option>
+                                <option value="teacher">👨‍🏫 Profesor/Empleado</option>
                             </select>
                         </div>
-                        <button type="submit">Crear Cuenta</button>
+                        <button type="submit" class="fb-btn-primary">Crear Cuenta</button>
                     </form>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE EDICIÓN DE COLEGIO -->
+    <div id="editSchoolModal" class="fb-modal">
+        <div class="fb-modal-content">
+            <div class="fb-modal-header">
+                <h2>Editar Información del Colegio</h2>
+                <button class="fb-modal-close" onclick="closeEditSchoolModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="fb-modal-body">
+                <form id="editSchoolForm">
+                    <input type="hidden" id="editSchoolKey">
+                    <div class="fb-form-group">
+                        <label class="fb-label">Nombre del Colegio</label>
+                        <input type="text" class="fb-input" id="editSchoolName" required>
+                    </div>
+                    <div class="fb-form-group">
+                        <label class="fb-label">Ciudad/Ubicación</label>
+                        <input type="text" class="fb-input" id="editSchoolLocation" required>
+                    </div>
+                    <div class="fb-form-group">
+                        <label class="fb-label">Dirección Completa</label>
+                        <input type="text" class="fb-input" id="editSchoolAddress" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="fb-form-group">
+                            <label class="fb-label">Teléfono</label>
+                            <input type="tel" class="fb-input" id="editSchoolPhone">
+                        </div>
+                        <div class="fb-form-group">
+                            <label class="fb-label">Email</label>
+                            <input type="email" class="fb-input" id="editSchoolEmail">
+                        </div>
+                    </div>
+                    <button type="submit" class="fb-btn-primary">Guardar Cambios</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE EDICIÓN DE USUARIO -->
+    <div id="editUserModal" class="fb-modal">
+        <div class="fb-modal-content">
+            <div class="fb-modal-header">
+                <h2>Editar Usuario</h2>
+                <button class="fb-modal-close" onclick="closeEditUserModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="fb-modal-body">
+                <form id="editUserForm">
+                    <input type="hidden" id="editUserId">
+                    <div class="fb-form-group">
+                        <label class="fb-label">Nombre</label>
+                        <input type="text" class="fb-input" id="editUserName" required>
+                    </div>
+                    <div class="fb-form-group">
+                        <label class="fb-label">Email</label>
+                        <input type="email" class="fb-input" id="editUserEmail" required>
+                    </div>
+                    <div class="fb-form-group">
+                        <label class="fb-label">Tipo de Usuario</label>
+                        <select class="fb-select" id="editUserType" required>
+                            <option value="parent">Padre/Madre</option>
+                            <option value="teacher">Profesor/Empleado</option>
+                            <option value="admin">Administrador</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="fb-btn-primary">Guardar Cambios</button>
+                </form>
             </div>
         </div>
     </div>
@@ -1733,10 +1612,27 @@
 
         // ==================== INICIALIZACIÓN ====================
         document.addEventListener('DOMContentLoaded', function() {
+            initializeAdmin();
             checkAuth();
             loadSampleData();
             initEventListeners();
         });
+
+        function initializeAdmin() {
+            // Crear usuario admin si no existe
+            const adminExists = users.find(u => u.email === 'admin@resenaescolar.com');
+            if (!adminExists) {
+                users.push({
+                    id: 0,
+                    name: 'Administrador',
+                    email: 'admin@resenaescolar.com',
+                    password: '5686',
+                    userType: 'admin',
+                    joinDate: new Date().toLocaleDateString('es-ES')
+                });
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+        }
 
         function checkAuth() {
             const savedUser = localStorage.getItem('currentUser');
@@ -1748,29 +1644,51 @@
             }
         }
 
+        function isAdmin() {
+            return currentUser && currentUser.userType === 'admin';
+        }
+
         function showLoginPrompt() {
-            document.getElementById('headerRight').innerHTML = `
-                <button onclick="openAuthModal()" style="padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 20px; cursor: pointer; font-weight: 600; width: 100%;">
-                    Iniciar Sesión / Registrarse
+            document.getElementById('userMenu').innerHTML = `
+                <button class="fb-btn-primary" onclick="openAuthModal()" style="width: auto;">
+                    <i class="fas fa-user-plus"></i> Unirse
                 </button>
             `;
             
-            document.getElementById('mainContent').innerHTML = `
-                <div class="login-prompt">
-                    <h2>👋 Bienvenido a ReseñaEscolar</h2>
-                    <p style="color: #666; margin: 15px 0;">Para compartir y ver reseñas de colegios, por favor inicia sesión o crea una cuenta.</p>
-                    <button onclick="openAuthModal()">Comenzar</button>
+            document.getElementById('mainContainer').innerHTML = `
+                <div style="grid-column: 1/-1;">
+                    <div class="fb-login-prompt">
+                        <i class="fas fa-school"></i>
+                        <h2>Bienvenido a ReseñaEscolar</h2>
+                        <p>Comparte tu experiencia y ayuda a otros a tomar mejores decisiones educativas</p>
+                        <button onclick="openAuthModal()">
+                            <i class="fas fa-sign-in-alt"></i> Comenzar Ahora
+                        </button>
+                    </div>
                 </div>
             `;
+
+            document.getElementById('searchSection').style.display = 'none';
         }
 
         function showMainApp() {
-            document.getElementById('headerRight').innerHTML = `
-                <div class="user-info">
-                    <div class="user-avatar">${currentUser.name.charAt(0).toUpperCase()}</div>
-                    <div class="user-name">${currentUser.name}</div>
+            document.getElementById('searchSection').style.display = 'block';
+            
+            const userInfoClass = isAdmin() ? 'fb-user-info admin' : 'fb-user-info';
+            
+            document.getElementById('userMenu').innerHTML = `
+                ${isAdmin() ? `
+                    <button class="fb-admin-btn" onclick="showAdminPanel()">
+                        <i class="fas fa-cog"></i> Panel Admin
+                    </button>
+                ` : ''}
+                <div class="${userInfoClass}">
+                    <div class="fb-avatar">${currentUser.name.charAt(0).toUpperCase()}</div>
+                    <span class="fb-username">${currentUser.name}</span>
                 </div>
-                <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+                <button class="fb-logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Salir
+                </button>
             `;
             
             renderMainContent();
@@ -1787,24 +1705,32 @@
         }
 
         function switchTab(tab) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.querySelectorAll('.fb-tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.fb-tab-content').forEach(content => content.classList.remove('active'));
             
             if (tab === 'login') {
-                document.querySelector('.tab-btn:first-child').classList.add('active');
+                document.querySelector('.fb-tab-btn:first-child').classList.add('active');
                 document.getElementById('loginTab').classList.add('active');
             } else {
-                document.querySelector('.tab-btn:last-child').classList.add('active');
+                document.querySelector('.fb-tab-btn:last-child').classList.add('active');
                 document.getElementById('registerTab').classList.add('active');
             }
         }
 
         function initEventListeners() {
-            // Cerrar modal
-            document.querySelector('.close').onclick = closeAuthModal;
+            // Cerrar modales
+            document.querySelectorAll('.fb-modal-close').forEach(btn => {
+                btn.onclick = function() {
+                    const modal = this.closest('.fb-modal');
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                };
+            });
+
             window.onclick = function(event) {
-                if (event.target == document.getElementById('authModal')) {
-                    closeAuthModal();
+                if (event.target.classList.contains('fb-modal')) {
+                    event.target.style.display = 'none';
+                    document.body.style.overflow = 'auto';
                 }
             };
 
@@ -1821,7 +1747,7 @@
                     localStorage.setItem('currentUser', JSON.stringify(user));
                     closeAuthModal();
                     showMainApp();
-                    showAlert('¡Bienvenido de nuevo!', 'success');
+                    showAlert(`¡Bienvenido ${user.userType === 'admin' ? 'Administrador' : 'de nuevo'}!`, 'success');
                 } else {
                     showAlert('Email o contraseña incorrectos', 'error');
                 }
@@ -1868,73 +1794,356 @@
             });
 
             // Búsqueda
+            let searchTimeout;
             document.getElementById('searchInput').addEventListener('input', function(e) {
-                const searchTerm = e.target.value.toLowerCase();
-                const resultsDiv = document.getElementById('searchResults');
+                clearTimeout(searchTimeout);
+                const searchTerm = e.target.value.trim();
                 
-                if (searchTerm.length < 2) {
-                    resultsDiv.style.display = 'none';
-                    return;
-                }
+                searchTimeout = setTimeout(() => {
+                    handleSearch(searchTerm);
+                }, 300);
+            });
 
-                const results = Object.values(schools).filter(school => 
-                    school.name.toLowerCase().includes(searchTerm) || 
-                    school.location.toLowerCase().includes(searchTerm) ||
-                    school.address.toLowerCase().includes(searchTerm)
-                );
-
-                if (results.length > 0) {
-                    resultsDiv.innerHTML = results.map(school => {
-                        const avgRating = (school.reviews.reduce((sum, r) => sum + r.rating, 0) / school.reviews.length).toFixed(1);
-                        return `
-                            <div class="search-result-item" onclick='selectSchoolFromSearch(${JSON.stringify(school).replace(/'/g, "&apos;")})'>
-                                <div class="search-result-content">
-                                    <div class="search-result-info">
-                                        <h4>${school.name}</h4>
-                                        <p>📍 ${school.location}</p>
-                                        <div class="search-result-details">
-                                            <span class="search-result-detail">📌 ${school.address}</span>
-                                            ${school.phone ? `<span class="search-result-detail">📞 ${school.phone}</span>` : ''}
-                                        </div>
-                                        <p style="font-size: 0.85em; color: #999; margin-top: 5px;">${school.reviews.length} reseñas</p>
-                                    </div>
-                                    <div class="search-result-rating">
-                                        <div class="search-rating-number">${avgRating}</div>
-                                        <div class="search-rating-stars">${'★'.repeat(Math.round(avgRating))}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    }).join('');
-                    resultsDiv.style.display = 'block';
-                } else {
-                    resultsDiv.innerHTML = '<div class="search-result-item"><p style="color: #999;">No se encontraron colegios</p></div>';
-                    resultsDiv.style.display = 'block';
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.fb-search')) {
+                    document.getElementById('searchDropdown').classList.remove('show');
                 }
+            });
+
+            // Editar Colegio
+            document.getElementById('editSchoolForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                updateSchool();
+            });
+
+            // Editar Usuario
+            document.getElementById('editUserForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                updateUser();
             });
         }
 
-        // ==================== SELECCIÓN DE COLEGIO ====================
+        // ==================== PANEL DE ADMINISTRACIÓN ====================
+        function showAdminPanel() {
+            if (!isAdmin()) {
+                showAlert('No tienes permisos de administrador', 'error');
+                return;
+            }
+
+            document.getElementById('mainContainer').innerHTML = `
+                <div style="grid-column: 1/-1;">
+                    <div class="admin-panel">
+                        <div class="admin-panel-header">
+                            <i class="fas fa-shield-alt"></i>
+                            <div>
+                                <h2>Panel de Administración</h2>
+                                <p style="color: var(--text-secondary); font-size: 14px;">Gestiona colegios y usuarios</p>
+                            </div>
+                        </div>
+
+                        <div class="admin-tabs">
+                            <button class="admin-tab-btn active" onclick="switchAdminTab('schools')">
+                                <i class="fas fa-school"></i> Gestionar Colegios
+                            </button>
+                            <button class="admin-tab-btn" onclick="switchAdminTab('users')">
+                                <i class="fas fa-users"></i> Gestionar Usuarios
+                            </button>
+                            <button class="admin-tab-btn" onclick="showMainApp()">
+                                <i class="fas fa-arrow-left"></i> Volver al Inicio
+                            </button>
+                        </div>
+
+                        <!-- TAB DE COLEGIOS -->
+                        <div id="adminSchoolsTab" class="admin-tab-content active">
+                            <h3 style="margin-bottom: 16px;"><i class="fas fa-school"></i> Colegios Registrados</h3>
+                            <div style="overflow-x: auto;">
+                                <table class="admin-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Ubicación</th>
+                                            <th>Dirección</th>
+                                            <th>Teléfono</th>
+                                            <th>Email</th>
+                                            <th>Reseñas</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="schoolsTableBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- TAB DE USUARIOS -->
+                        <div id="adminUsersTab" class="admin-tab-content">
+                            <h3 style="margin-bottom: 16px;"><i class="fas fa-users"></i> Usuarios Registrados</h3>
+                            <div style="overflow-x: auto;">
+                                <table class="admin-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Email</th>
+                                            <th>Tipo</th>
+                                            <th>Fecha de Registro</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="usersTableBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            renderSchoolsTable();
+            renderUsersTable();
+        }
+
+        function switchAdminTab(tab) {
+            document.querySelectorAll('.admin-tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.admin-tab-content').forEach(content => content.classList.remove('active'));
+            
+            if (tab === 'schools') {
+                document.querySelector('.admin-tab-btn:first-child').classList.add('active');
+                document.getElementById('adminSchoolsTab').classList.add('active');
+            } else {
+                document.querySelector('.admin-tab-btn:nth-child(2)').classList.add('active');
+                document.getElementById('adminUsersTab').classList.add('active');
+            }
+        }
+
+        function renderSchoolsTable() {
+            const tbody = document.getElementById('schoolsTableBody');
+            if (!tbody) return;
+
+            const schoolsArray = Object.entries(schools);
+            
+            if (schoolsArray.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: var(--text-secondary);">No hay colegios registrados</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = schoolsArray.map(([key, school]) => `
+                <tr>
+                    <td><strong>${school.name}</strong></td>
+                    <td>${school.location}</td>
+                    <td>${school.address}</td>
+                    <td>${school.phone || '-'}</td>
+                    <td>${school.email || '-'}</td>
+                    <td><span class="admin-badge" style="background: var(--facebook-blue-light); color: var(--facebook-blue);">${school.reviews.length}</span></td>
+                    <td>
+                        <button class="admin-action-btn edit" onclick="editSchool('${key}')">
+                            <i class="fas fa-edit"></i> Editar
+                        </button>
+                        <button class="admin-action-btn delete" onclick="deleteSchool('${key}')">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderUsersTable() {
+            const tbody = document.getElementById('usersTableBody');
+            if (!tbody) return;
+
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td><strong>${user.name}</strong></td>
+                    <td>${user.email}</td>
+                    <td><span class="admin-badge ${user.userType}">${user.userType === 'admin' ? 'Admin' : user.userType === 'parent' ? 'Padre' : 'Profesor'}</span></td>
+                    <td>${user.joinDate}</td>
+                    <td>
+                        ${user.userType !== 'admin' || user.id !== 0 ? `
+                            <button class="admin-action-btn edit" onclick="editUser(${user.id})">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                            <button class="admin-action-btn delete" onclick="deleteUser(${user.id})">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </button>
+                        ` : '<span style="color: var(--text-secondary);">Cuenta protegida</span>'}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // ==================== EDITAR COLEGIO ====================
+        function editSchool(schoolKey) {
+            const school = schools[schoolKey];
+            if (!school) return;
+
+            document.getElementById('editSchoolKey').value = schoolKey;
+            document.getElementById('editSchoolName').value = school.name;
+            document.getElementById('editSchoolLocation').value = school.location;
+            document.getElementById('editSchoolAddress').value = school.address;
+            document.getElementById('editSchoolPhone').value = school.phone || '';
+            document.getElementById('editSchoolEmail').value = school.email || '';
+
+            document.getElementById('editSchoolModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeEditSchoolModal() {
+            document.getElementById('editSchoolModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function updateSchool() {
+            const schoolKey = document.getElementById('editSchoolKey').value;
+            const school = schools[schoolKey];
+            
+            if (!school) {
+                showAlert('Colegio no encontrado', 'error');
+                return;
+            }
+
+            school.name = document.getElementById('editSchoolName').value;
+            school.location = document.getElementById('editSchoolLocation').value;
+            school.address = document.getElementById('editSchoolAddress').value;
+            school.phone = document.getElementById('editSchoolPhone').value;
+            school.email = document.getElementById('editSchoolEmail').value;
+
+            localStorage.setItem('schools', JSON.stringify(schools));
+            
+            closeEditSchoolModal();
+            showAlert('Colegio actualizado correctamente', 'success');
+            renderSchoolsTable();
+        }
+
+        function deleteSchool(schoolKey) {
+            if (!confirm('¿Estás seguro de eliminar este colegio? Esta acción no se puede deshacer.')) {
+                return;
+            }
+
+            delete schools[schoolKey];
+            localStorage.setItem('schools', JSON.stringify(schools));
+            
+            showAlert('Colegio eliminado correctamente', 'success');
+            renderSchoolsTable();
+        }
+
+        // ==================== EDITAR USUARIO ====================
+        function editUser(userId) {
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+
+            document.getElementById('editUserId').value = userId;
+            document.getElementById('editUserName').value = user.name;
+            document.getElementById('editUserEmail').value = user.email;
+            document.getElementById('editUserType').value = user.userType;
+
+            document.getElementById('editUserModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeEditUserModal() {
+            document.getElementById('editUserModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function updateUser() {
+            const userId = parseInt(document.getElementById('editUserId').value);
+            const user = users.find(u => u.id === userId);
+            
+            if (!user) {
+                showAlert('Usuario no encontrado', 'error');
+                return;
+            }
+
+            user.name = document.getElementById('editUserName').value;
+            user.email = document.getElementById('editUserEmail').value;
+            user.userType = document.getElementById('editUserType').value;
+
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            closeEditUserModal();
+            showAlert('Usuario actualizado correctamente', 'success');
+            renderUsersTable();
+        }
+
+        function deleteUser(userId) {
+            if (!confirm('¿Estás seguro de eliminar este usuario? Esta acción no se puede deshacer.')) {
+                return;
+            }
+
+            users = users.filter(u => u.id !== userId);
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            showAlert('Usuario eliminado correctamente', 'success');
+            renderUsersTable();
+        }
+
+        // ==================== BÚSQUEDA ====================
+        function handleSearch(searchTerm) {
+            const dropdown = document.getElementById('searchDropdown');
+            
+            if (searchTerm.length < 2) {
+                dropdown.classList.remove('show');
+                return;
+            }
+
+            const results = Object.values(schools).filter(school => 
+                school.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                school.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                school.address.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+
+            if (results.length > 0) {
+                dropdown.innerHTML = results.map(school => {
+                    const avgRating = (school.reviews.reduce((sum, r) => sum + r.rating, 0) / school.reviews.length).toFixed(1);
+                    return `
+                        <div class="fb-search-result" onclick='selectSchoolFromSearch(${JSON.stringify(school).replace(/'/g, "&#39;")})'>
+                            <div class="fb-search-result-header">
+                                <span class="fb-search-result-name">${school.name}</span>
+                                <span class="fb-search-result-rating">
+                                    ${avgRating} <i class="fas fa-star" style="color: #ffc107;"></i>
+                                </span>
+                            </div>
+                            <div class="fb-search-result-info">
+                                <span><i class="fas fa-map-marker-alt"></i> ${school.location}</span>
+                                <span><i class="fas fa-comments"></i> ${school.reviews.length} reseñas</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                dropdown.classList.add('show');
+            } else {
+                dropdown.innerHTML = '<div class="fb-search-no-results"><i class="fas fa-search"></i><br>No se encontraron colegios</div>';
+                dropdown.classList.add('show');
+            }
+        }
+
         function selectSchoolFromSearch(school) {
             selectedSchool = school;
+            
+            document.getElementById('searchDropdown').classList.remove('show');
+            document.getElementById('searchInput').value = '';
             
             document.getElementById('schoolName').value = school.name;
             document.getElementById('location').value = school.location;
             document.getElementById('schoolName').readOnly = true;
             document.getElementById('location').readOnly = true;
             
-            document.querySelector('.school-info-fields').classList.remove('show');
+            const infoBox = document.querySelector('.fb-school-info-box');
+            if (infoBox) {
+                infoBox.classList.remove('show');
+            }
             
-            const badge = document.querySelector('.selected-school-badge');
-            badge.classList.add('show');
-            document.getElementById('selectedSchoolName').textContent = school.name;
+            const badge = document.querySelector('.fb-badge');
+            if (badge) {
+                badge.classList.add('show');
+                badge.innerHTML = `
+                    <span><i class="fas fa-check-circle"></i> ${school.name}</span>
+                    <button onclick="clearSelectedSchool(); event.stopPropagation();">
+                        <i class="fas fa-times"></i> Cambiar
+                    </button>
+                `;
+            }
             
-            document.getElementById('searchResults').style.display = 'none';
-            document.getElementById('searchInput').value = '';
+            document.querySelector('.fb-create-post').scrollIntoView({ behavior: 'smooth', block: 'start' });
             
-            document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
-            
-            showAlert(`Seleccionado: ${school.name}. Ahora puedes agregar tu reseña.`, 'success');
+            showAlert(`Colegio seleccionado: ${school.name}`, 'success');
         }
 
         function clearSelectedSchool() {
@@ -1943,19 +2152,24 @@
             document.getElementById('location').value = '';
             document.getElementById('schoolName').readOnly = false;
             document.getElementById('location').readOnly = false;
-            document.querySelector('.selected-school-badge').classList.remove('show');
+            
+            const badge = document.querySelector('.fb-badge');
+            if (badge) {
+                badge.classList.remove('show');
+            }
+            
             checkIfNewSchool();
         }
 
         function checkIfNewSchool() {
             const schoolName = document.getElementById('schoolName').value;
             const schoolKey = schoolName.toLowerCase().replace(/\s+/g, '-');
-            const schoolInfoFields = document.querySelector('.school-info-fields');
+            const schoolInfoBox = document.querySelector('.fb-school-info-box');
             
             if (schoolName && !schools[schoolKey] && !selectedSchool) {
-                schoolInfoFields.classList.add('show');
+                if (schoolInfoBox) schoolInfoBox.classList.add('show');
             } else {
-                schoolInfoFields.classList.remove('show');
+                if (schoolInfoBox) schoolInfoBox.classList.remove('show');
             }
         }
 
@@ -1969,123 +2183,117 @@
 
         function showAlert(message, type) {
             const alertDiv = document.createElement('div');
-            alertDiv.className = `alert alert-${type}`;
-            alertDiv.textContent = message;
+            alertDiv.className = `fb-alert ${type}`;
+            alertDiv.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
             
-            document.querySelector('.container').insertBefore(alertDiv, document.querySelector('header').nextSibling);
+            document.body.appendChild(alertDiv);
             
             setTimeout(() => alertDiv.remove(), 3000);
         }
 
         // ==================== RENDERIZADO PRINCIPAL ====================
         function renderMainContent() {
-            document.getElementById('mainContent').innerHTML = `
-                <div class="main-content">
-                    <!-- FORMULARIO CON ESTRUCTURA MEJORADA -->
-                    <div class="form-section">
-                        <h2>📝 Agregar Reseña</h2>
-                        
-                        <div class="form-content-wrapper">
-                            <div class="selected-school-badge">
-                                <strong>🏫 Colegio seleccionado:</strong>
-                                <span id="selectedSchoolName"></span>
-                                <button onclick="clearSelectedSchool()">✕ Cambiar</button>
+            document.getElementById('mainContainer').innerHTML = `
+                <div class="fb-create-post">
+                    <div class="fb-create-header">
+                        <h2><i class="fas fa-edit"></i> Crear Reseña</h2>
+                    </div>
+                    
+                    <div class="fb-create-body">
+                        <div class="fb-badge"></div>
+
+                        <form id="reviewForm">
+                            <div class="fb-form-group">
+                                <label class="fb-label">Nombre del Colegio</label>
+                                <input type="text" class="fb-input" id="schoolName" required oninput="checkIfNewSchool()" placeholder="Escribe el nombre...">
+                                <small><i class="fas fa-info-circle"></i> Busca en la barra superior para seleccionar un colegio existente</small>
                             </div>
-                            
-                            <form id="reviewForm">
-                                <div class="form-group">
-                                    <label>Nombre del Colegio *</label>
-                                    <input type="text" id="schoolName" required oninput="checkIfNewSchool()">
-                                    <small>💡 Usa la búsqueda arriba para seleccionar un colegio existente</small>
+
+                            <div class="fb-form-group">
+                                <label class="fb-label">Ciudad/Ubicación</label>
+                                <input type="text" class="fb-input" id="location" required placeholder="Ej: Buenos Aires, Argentina">
+                            </div>
+
+                            <div class="fb-school-info-box">
+                                <h4><i class="fas fa-school"></i> Colegio Nuevo - Completa la información</h4>
+                                
+                                <div class="fb-form-group">
+                                    <label class="fb-label">Dirección Completa</label>
+                                    <input type="text" class="fb-input" id="schoolAddress" placeholder="Calle, número, colonia">
                                 </div>
 
-                                <div class="form-group">
-                                    <label>Ciudad/Ubicación *</label>
-                                    <input type="text" id="location" required placeholder="Ej: Buenos Aires, Argentina">
+                                <div class="fb-form-group">
+                                    <label class="fb-label">Teléfono</label>
+                                    <input type="tel" class="fb-input" id="schoolPhone" placeholder="+54 11 1234-5678">
                                 </div>
 
-                                <!-- INFORMACIÓN DEL COLEGIO -->
-                                <div class="school-info-fields">
-                                    <h4>📋 Información del Colegio</h4>
-                                    <small style="color: #666; margin-bottom: 15px;">Este parece ser un colegio nuevo. Por favor completa la información.</small>
-                                    
-                                    <div class="form-group">
-                                        <label>Dirección Completa *</label>
-                                        <input type="text" id="schoolAddress" placeholder="Calle, número, colonia">
-                                    </div>
-
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label>Teléfono</label>
-                                            <input type="tel" id="schoolPhone" placeholder="+54 11 1234-5678">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Correo Electrónico</label>
-                                            <input type="email" id="schoolEmail" placeholder="contacto@colegio.com">
-                                        </div>
-                                    </div>
+                                <div class="fb-form-group">
+                                    <label class="fb-label">Email</label>
+                                    <input type="email" class="fb-input" id="schoolEmail" placeholder="contacto@colegio.com">
                                 </div>
+                            </div>
 
-                                <div class="form-group">
-                                    <label>Calificación General *</label>
-                                    <div class="star-rating" id="starRating">
-                                        <span class="star" data-rating="1">★</span>
-                                        <span class="star" data-rating="2">★</span>
-                                        <span class="star" data-rating="3">★</span>
-                                        <span class="star" data-rating="4">★</span>
-                                        <span class="star" data-rating="5">★</span>
-                                    </div>
-                                    <input type="hidden" id="rating" required>
+                            <div class="fb-form-group">
+                                <label class="fb-label">Calificación</label>
+                                <div class="fb-stars" id="starRating">
+                                    <span class="fb-star" data-rating="1">★</span>
+                                    <span class="fb-star" data-rating="2">★</span>
+                                    <span class="fb-star" data-rating="3">★</span>
+                                    <span class="fb-star" data-rating="4">★</span>
+                                    <span class="fb-star" data-rating="5">★</span>
                                 </div>
+                                <input type="hidden" id="rating" required>
+                            </div>
 
-                                <div class="form-group checkbox-group">
-                                    <label>Recomendaciones:</label>
-                                    <div class="checkbox-item">
+                            <div class="fb-form-group">
+                                <label class="fb-label">Recomendaciones</label>
+                                <div class="fb-checkbox-group">
+                                    <div class="fb-checkbox-item">
                                         <input type="checkbox" id="recommendStudy">
-                                        <label for="recommendStudy">✅ Recomiendo estudiar aquí</label>
+                                        <label for="recommendStudy"><i class="fas fa-graduation-cap"></i> Recomiendo estudiar aquí</label>
                                     </div>
-                                    <div class="checkbox-item">
+                                    <div class="fb-checkbox-item">
                                         <input type="checkbox" id="recommendWork">
-                                        <label for="recommendWork">💼 Recomiendo trabajar aquí</label>
+                                        <label for="recommendWork"><i class="fas fa-briefcase"></i> Recomiendo trabajar aquí</label>
                                     </div>
                                 </div>
-
-                                <div class="form-group">
-                                    <label>Tu Opinión *</label>
-                                    <textarea id="comment" placeholder="Comparte tu experiencia..." required></textarea>
-                                </div>
-
-                                <div class="anonymous-option">
-                                    <label>
-                                        <input type="checkbox" id="postAnonymous">
-                                        <span>🕶️ Publicar de forma anónima</span>
-                                    </label>
-                                    <small>Tu identidad no será visible para otros usuarios</small>
-                                </div>
-                            </form>
-                        </div>
-                        
-                        <!-- BOTÓN SIEMPRE VISIBLE -->
-                        <div class="form-button-container">
-                            <button type="submit" form="reviewForm">Publicar Reseña</button>
-                        </div>
-                    </div>
-
-                    <!-- RESEÑAS -->
-                    <div class="reviews-section">
-                        <div class="filters">
-                            <h3>🔍 Filtrar por:</h3>
-                            <div class="filter-buttons">
-                                <button class="filter-btn active" data-filter="all">Todos</button>
-                                <button class="filter-btn" data-filter="parent">Padres</button>
-                                <button class="filter-btn" data-filter="teacher">Profesores</button>
-                                <button class="filter-btn" data-filter="5">5 ⭐</button>
-                                <button class="filter-btn" data-filter="recommended">Recomendados</button>
                             </div>
-                        </div>
 
-                        <div id="reviewsList"></div>
+                            <div class="fb-form-group">
+                                <label class="fb-label">Tu Opinión</label>
+                                <textarea class="fb-textarea" id="comment" required placeholder="¿Qué piensas de este colegio?"></textarea>
+                            </div>
+
+                            <div class="fb-checkbox-item">
+                                <input type="checkbox" id="postAnonymous">
+                                <label for="postAnonymous"><i class="fas fa-user-secret"></i> Publicar de forma anónima</label>
+                            </div>
+                        </form>
                     </div>
+                    
+                    <div class="fb-create-footer">
+                        <button type="submit" form="reviewForm" class="fb-btn-primary">
+                            <i class="fas fa-paper-plane"></i> Publicar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="fb-feed">
+                    <div class="fb-filters">
+                        <h3><i class="fas fa-filter"></i> Filtros</h3>
+                        <div class="fb-filter-buttons">
+                            <button class="fb-filter-btn active" data-filter="all">Todos</button>
+                            <button class="fb-filter-btn" data-filter="parent">Padres</button>
+                            <button class="fb-filter-btn" data-filter="teacher">Profesores</button>
+                            <button class="fb-filter-btn" data-filter="5">5 ⭐</button>
+                            <button class="fb-filter-btn" data-filter="recommended">Recomendados</button>
+                        </div>
+                    </div>
+
+                    <div id="reviewsList"></div>
                 </div>
             `;
 
@@ -2095,31 +2303,14 @@
         }
 
         function initFormEvents() {
-            // Sistema de estrellas
-            document.querySelectorAll('.star').forEach(star => {
-                const handleStarClick = function() {
+            document.querySelectorAll('.fb-star').forEach(star => {
+                star.addEventListener('click', function() {
                     currentRating = parseInt(this.dataset.rating);
                     document.getElementById('rating').value = currentRating;
                     updateStars();
-                };
-
-                star.addEventListener('click', handleStarClick);
-                star.addEventListener('touchend', function(e) {
-                    e.preventDefault();
-                    handleStarClick.call(this);
-                });
-
-                star.addEventListener('mouseenter', function() {
-                    const rating = parseInt(this.dataset.rating);
-                    document.querySelectorAll('.star').forEach((s, index) => {
-                        s.style.color = index < rating ? '#ffd700' : '#ddd';
-                    });
                 });
             });
 
-            document.getElementById('starRating').addEventListener('mouseleave', updateStars);
-
-            // Enviar reseña
             document.getElementById('reviewForm').addEventListener('submit', function(e) {
                 e.preventDefault();
 
@@ -2169,7 +2360,7 @@
 
                 const review = {
                     id: Date.now(),
-                    userName: isAnonymous ? 'Anónimo' : currentUser.name,
+                    userName: isAnonymous ? 'Usuario Anónimo' : currentUser.name,
                     userId: currentUser.id,
                     userType: currentUser.userType,
                     isAnonymous: isAnonymous,
@@ -2192,27 +2383,34 @@
 
                 localStorage.setItem('schools', JSON.stringify(schools));
 
-                this.reset();
+                document.getElementById('comment').value = '';
+                document.getElementById('recommendStudy').checked = false;
+                document.getElementById('recommendWork').checked = false;
+                document.getElementById('postAnonymous').checked = false;
                 currentRating = 0;
                 updateStars();
-                clearSelectedSchool();
+
+                if (!selectedSchool) {
+                    this.reset();
+                    clearSelectedSchool();
+                }
 
                 renderReviews();
                 showAlert('¡Reseña publicada exitosamente!', 'success');
                 
                 setTimeout(() => {
-                    const firstCard = document.querySelector('.school-card');
-                    if (firstCard) {
-                        firstCard.scrollIntoView({ behavior: 'smooth' });
+                    const firstPost = document.querySelector('.fb-post');
+                    if (firstPost) {
+                        firstPost.scrollIntoView({ behavior: 'smooth' });
                     }
                 }, 100);
             });
         }
 
         function initFilterEvents() {
-            document.querySelectorAll('.filter-btn').forEach(btn => {
+            document.querySelectorAll('.fb-filter-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.fb-filter-btn').forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
                     currentFilter = this.dataset.filter;
                     renderReviews();
@@ -2221,22 +2419,17 @@
         }
 
         function updateStars() {
-            document.querySelectorAll('.star').forEach((s, index) => {
+            document.querySelectorAll('.fb-star').forEach((s, index) => {
                 s.classList.toggle('active', index < currentRating);
             });
         }
 
-        // ==================== RESPUESTAS ====================
         function toggleReplyForm(reviewId) {
             const form = document.getElementById(`replyForm-${reviewId}`);
             if (form) {
                 form.classList.toggle('show');
                 if (form.classList.contains('show')) {
-                    const textarea = form.querySelector('textarea');
-                    textarea.focus();
-                    setTimeout(() => {
-                        form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                    }, 100);
+                    form.querySelector('textarea').focus();
                 }
             }
         }
@@ -2269,7 +2462,7 @@
                     localStorage.setItem('schools', JSON.stringify(schools));
                     
                     renderReviews();
-                    showAlert('Comentario agregado correctamente', 'success');
+                    showAlert('Comentario agregado', 'success');
                 }
             });
         }
@@ -2292,9 +2485,9 @@
                 
                 const review = findReviewById(reviewId);
                 if (review && review.replies) {
-                    btn.textContent = isHidden
-                        ? `▲ Ocultar respuestas`
-                        : `▼ Ver ${review.replies.length} respuesta${review.replies.length !== 1 ? 's' : ''}`;
+                    btn.innerHTML = isHidden
+                        ? `<i class="fas fa-chevron-up"></i> Ocultar respuestas`
+                        : `<i class="fas fa-chevron-down"></i> Ver ${review.replies.length} respuesta${review.replies.length !== 1 ? 's' : ''}`;
                 }
             }
         }
@@ -2307,19 +2500,18 @@
             return null;
         }
 
-        // ==================== RENDERIZADO ====================
         function renderReviews() {
             const container = document.getElementById('reviewsList');
             container.innerHTML = '';
 
             if (Object.keys(schools).length === 0) {
                 container.innerHTML = `
-                    <div class="empty-state">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
-                        </svg>
-                        <h3>No hay reseñas todavía</h3>
-                        <p>Sé el primero en compartir tu experiencia</p>
+                    <div class="fb-post">
+                        <div class="fb-empty-state">
+                            <i class="fas fa-comments"></i>
+                            <h3>No hay reseñas todavía</h3>
+                            <p>Sé el primero en compartir tu experiencia</p>
+                        </div>
                     </div>
                 `;
                 return;
@@ -2337,69 +2529,78 @@
                 const totalLikes = school.reviews.reduce((sum, r) => sum + r.likes, 0);
                 const totalDislikes = school.reviews.reduce((sum, r) => sum + r.dislikes, 0);
 
-                const schoolCard = document.createElement('div');
-                schoolCard.className = 'school-card';
-                schoolCard.innerHTML = `
-                    <div class="school-header">
-                        <div>
-                            <div class="school-name">${school.name}</div>
-                            <div class="school-location">📍 ${school.location}</div>
-                        </div>
-                        <div class="overall-rating">
-                            <div class="rating-number">${avgRating}</div>
-                            <div class="stars-display">${'★'.repeat(Math.round(avgRating))}</div>
-                        </div>
-                    </div>
-
-                    <div class="school-contact-info">
-                        <div class="contact-item">
-                            <strong>📌</strong> <span>${school.address}</span>
-                        </div>
-                        ${school.phone ? `
-                            <div class="contact-item">
-                                <strong>📞</strong> <a href="tel:${school.phone}">${school.phone}</a>
+                const postCard = document.createElement('div');
+                postCard.className = 'fb-post';
+                postCard.innerHTML = `
+                    <div class="fb-post-header">
+                        <div class="fb-post-school-info">
+                            <h3>${school.name}</h3>
+                            <div class="fb-post-school-location">
+                                <i class="fas fa-map-marker-alt"></i> ${school.location}
                             </div>
-                        ` : ''}
-                        ${school.email ? `
-                            <div class="contact-item">
-                                <strong>📧</strong> <a href="mailto:${school.email}">${school.email}</a>
+                        </div>
+                        <div class="fb-post-rating">
+                            <div class="fb-post-rating-number">${avgRating}</div>
+                            <div class="fb-post-rating-stars">${'★'.repeat(Math.round(avgRating))}</div>
+                        </div>
+                    </div>
+
+                    <div class="fb-contact-section">
+                        <div class="fb-contact-items">
+                            <div class="fb-contact-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>${school.address}</span>
                             </div>
-                        ` : ''}
-                    </div>
-
-                    <div class="stats">
-                        <div class="stat-box">
-                            <div class="stat-number">${school.stats.totalReviews}</div>
-                            <div class="stat-label">Reseñas</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-number">${studyPercent}%</div>
-                            <div class="stat-label">Recomiendan estudiar</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-number">${workPercent}%</div>
-                            <div class="stat-label">Recomiendan trabajar</div>
+                            ${school.phone ? `
+                                <div class="fb-contact-item">
+                                    <i class="fas fa-phone"></i>
+                                    <a href="tel:${school.phone}">${school.phone}</a>
+                                </div>
+                            ` : ''}
+                            ${school.email ? `
+                                <div class="fb-contact-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <a href="mailto:${school.email}">${school.email}</a>
+                                </div>
+                            ` : ''}
                         </div>
                     </div>
 
-                    <div class="charts-container">
-                        <div class="chart-box">
-                            <h4>📊 Calificaciones</h4>
-                            <canvas id="ratingsChart-${school.name.replace(/\s+/g, '-')}" class="chart-canvas"></canvas>
+                    <div class="fb-stats">
+                        <div class="fb-stat-box">
+                            <div class="fb-stat-number">${school.stats.totalReviews}</div>
+                            <div class="fb-stat-label">Reseñas</div>
                         </div>
-                        <div class="chart-box">
-                            <h4>👍👎 Likes/Dislikes</h4>
-                            <canvas id="likesChart-${school.name.replace(/\s+/g, '-')}" class="chart-canvas"></canvas>
+                        <div class="fb-stat-box">
+                            <div class="fb-stat-number">${studyPercent}%</div>
+                            <div class="fb-stat-label">Recomiendan estudiar</div>
+                        </div>
+                        <div class="fb-stat-box">
+                            <div class="fb-stat-number">${workPercent}%</div>
+                            <div class="fb-stat-label">Recomiendan trabajar</div>
                         </div>
                     </div>
 
-                    <div class="comments-section">
-                        <h3>💬 Opiniones (${filteredReviews.length})</h3>
+                    <div class="fb-charts">
+                        <div class="fb-chart-box">
+                            <h4><i class="fas fa-chart-bar"></i> Distribución de Calificaciones</h4>
+                            <canvas id="ratingsChart-${school.name.replace(/\s+/g, '-')}"></canvas>
+                        </div>
+                        <div class="fb-chart-box">
+                            <h4><i class="fas fa-thumbs-up"></i> Likes vs Dislikes</h4>
+                            <canvas id="likesChart-${school.name.replace(/\s+/g, '-')}"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="fb-comments-section">
+                        <h3 class="fb-comments-header">
+                            <i class="fas fa-comments"></i> Opiniones (${filteredReviews.length})
+                        </h3>
                         ${filteredReviews.map(review => renderReview(review)).join('')}
                     </div>
                 `;
 
-                container.appendChild(schoolCard);
+                container.appendChild(postCard);
 
                 setTimeout(() => {
                     createRatingsChart(school);
@@ -2414,67 +2615,80 @@
             const isAnonymous = review.isAnonymous || false;
 
             return `
-                <div class="comment ${isAnonymous ? 'anonymous' : ''}">
-                    <div class="comment-header">
-                        <div>
-                            ${isAnonymous ? 
-                                '<span class="comment-type anonymous">🕶️ Anónimo</span>' :
-                                `<span class="comment-type ${review.userType}">${review.userType === 'parent' ? '👨‍👩‍👧 Padre' : '👨‍🏫 Profesor'}</span>`
-                            }
-                            <span class="comment-author">${review.userName}</span>
+                <div class="fb-comment ${isAnonymous ? 'anonymous' : ''}">
+                    <div class="fb-comment-wrapper">
+                        <div class="fb-comment-avatar ${isAnonymous ? 'anonymous' : ''}">
+                            ${isAnonymous ? '<i class="fas fa-user-secret"></i>' : review.userName.charAt(0).toUpperCase()}
                         </div>
-                        <span class="comment-date">${review.date}</span>
-                    </div>
-                    <div class="comment-rating">${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</div>
-                    <div class="comment-text">${review.comment}</div>
-                    ${review.recommendStudy || review.recommendWork ? `
-                        <div style="margin: 10px 0; color: #28a745; font-size: 0.85em;">
-                            ${review.recommendStudy ? '✅ Recomienda estudiar ' : ''}
-                            ${review.recommendWork ? '✅ Recomienda trabajar' : ''}
-                        </div>
-                    ` : ''}
-                    
-                    <div class="comment-footer">
-                        <button class="like-button ${review.likedBy.includes(currentUser.id) ? 'liked' : ''}" onclick="toggleLike(${review.id}, true)">
-                            👍 ${review.likes}
-                        </button>
-                        <button class="dislike-button ${review.dislikedBy.includes(currentUser.id) ? 'disliked' : ''}" onclick="toggleLike(${review.id}, false)">
-                            👎 ${review.dislikes}
-                        </button>
-                        <button class="reply-button" onclick="toggleReplyForm(${review.id})">
-                            💬 ${repliesCount > 0 ? `(${repliesCount})` : 'Comentar'}
-                        </button>
-                    </div>
-
-                    <div class="reply-form" id="replyForm-${review.id}">
-                        <textarea id="replyText-${review.id}" placeholder="Escribe tu comentario..."></textarea>
-                        <div class="reply-form-buttons">
-                            <button class="btn-primary" onclick="submitReply(${review.id})">Enviar</button>
-                            <button class="btn-cancel" onclick="cancelReply(${review.id})">Cancelar</button>
-                        </div>
-                    </div>
-
-                    ${hasReplies ? `
-                        <button class="show-replies-btn" id="toggleBtn-${review.id}" onclick="toggleReplies(${review.id})">
-                            ▼ Ver ${repliesCount} respuesta${repliesCount !== 1 ? 's' : ''}
-                        </button>
-                        <div class="replies-section" id="replies-${review.id}" style="display: none;">
-                            ${review.replies.map(reply => `
-                                <div class="reply">
-                                    <div class="reply-header">
-                                        <span class="reply-author">👤 ${reply.userName}</span>
-                                        <span class="reply-date">${reply.date}</span>
-                                    </div>
-                                    <div class="reply-text">${reply.text}</div>
+                        <div class="fb-comment-content">
+                            <div class="fb-comment-bubble">
+                                <div class="fb-comment-header">
+                                    <span class="fb-comment-author">${review.userName}</span>
+                                    <span class="fb-comment-badge ${isAnonymous ? 'anonymous' : review.userType}">
+                                        ${isAnonymous ? '<i class="fas fa-user-secret"></i> Anónimo' : 
+                                          review.userType === 'parent' ? '<i class="fas fa-users"></i> Padre/Madre' : 
+                                          '<i class="fas fa-chalkboard-teacher"></i> Profesor'}
+                                    </span>
                                 </div>
-                            `).join('')}
+                                <div class="fb-comment-stars">${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</div>
+                                <div class="fb-comment-text">${review.comment}</div>
+                                ${review.recommendStudy || review.recommendWork ? `
+                                    <div class="fb-comment-recommend">
+                                        ${review.recommendStudy ? '<i class="fas fa-check"></i> Recomienda para estudiar ' : ''}
+                                        ${review.recommendWork ? '<i class="fas fa-check"></i> Recomienda para trabajar' : ''}
+                                    </div>
+                                ` : ''}
+                            </div>
+                            <div class="fb-comment-meta">
+                                <span class="fb-comment-date"><i class="far fa-clock"></i> ${review.date}</span>
+                                <span class="fb-comment-action ${review.likedBy.includes(currentUser.id) ? 'liked' : ''}" onclick="toggleLike(${review.id}, true)">
+                                    <i class="fas fa-thumbs-up"></i> ${review.likes > 0 ? review.likes : 'Me gusta'}
+                                </span>
+                                <span class="fb-comment-action ${review.dislikedBy.includes(currentUser.id) ? 'disliked' : ''}" onclick="toggleLike(${review.id}, false)">
+                                    <i class="fas fa-thumbs-down"></i> ${review.dislikes > 0 ? review.dislikes : ''}
+                                </span>
+                                <span class="fb-comment-action" onclick="toggleReplyForm(${review.id})">
+                                    <i class="fas fa-reply"></i> Responder
+                                </span>
+                            </div>
+
+                            <div class="fb-reply-form" id="replyForm-${review.id}">
+                                <textarea id="replyText-${review.id}" placeholder="Escribe una respuesta..."></textarea>
+                                <div class="fb-reply-form-buttons">
+                                    <button class="fb-btn-small secondary" onclick="cancelReply(${review.id})">Cancelar</button>
+                                    <button class="fb-btn-small primary" onclick="submitReply(${review.id})">
+                                        <i class="fas fa-paper-plane"></i> Enviar
+                                    </button>
+                                </div>
+                            </div>
+
+                            ${hasReplies ? `
+                                <div class="fb-show-replies" id="toggleBtn-${review.id}" onclick="toggleReplies(${review.id})">
+                                    <i class="fas fa-chevron-down"></i> Ver ${repliesCount} respuesta${repliesCount !== 1 ? 's' : ''}
+                                </div>
+                                <div class="fb-replies" id="replies-${review.id}" style="display: none;">
+                                    ${review.replies.map(reply => `
+                                        <div class="fb-reply">
+                                            <div class="fb-reply-avatar">
+                                                ${reply.userName.charAt(0).toUpperCase()}
+                                            </div>
+                                            <div class="fb-reply-content">
+                                                <div class="fb-reply-bubble">
+                                                    <div class="fb-reply-author">${reply.userName}</div>
+                                                    <div class="fb-reply-text">${reply.text}</div>
+                                                </div>
+                                                <div class="fb-reply-date"><i class="far fa-clock"></i> ${reply.date}</div>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            ` : ''}
                         </div>
-                    ` : ''}
+                    </div>
                 </div>
             `;
         }
 
-        // ==================== GRÁFICOS ====================
         function createRatingsChart(school) {
             const ctx = document.getElementById(`ratingsChart-${school.name.replace(/\s+/g, '-')}`);
             if (!ctx) return;
@@ -2487,12 +2701,12 @@
             new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['1⭐', '2⭐', '3⭐', '4⭐', '5⭐'],
+                    labels: ['1★', '2★', '3★', '4★', '5★'],
                     datasets: [{
-                        label: 'Cantidad',
+                        label: 'Reseñas',
                         data: ratingCounts,
-                        backgroundColor: ['#dc3545', '#fd7e14', '#ffc107', '#28a745', '#20c997'],
-                        borderRadius: 5
+                        backgroundColor: ['#dc3545', '#fd7e14', '#ffc107', '#28a745', '#1877f2'],
+                        borderRadius: 6
                     }]
                 },
                 options: {
@@ -2516,23 +2730,29 @@
             new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['👍 Likes', '👎 Dislikes'],
+                    labels: ['Likes', 'Dislikes'],
                     datasets: [{
                         data: [totalLikes, totalDislikes],
-                        backgroundColor: ['#28a745', '#dc3545'],
-                        borderWidth: 3,
-                        borderColor: '#fff'
+                        backgroundColor: ['#1877f2', '#dc3545'],
+                        borderWidth: 0
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: true,
-                    plugins: { legend: { position: 'bottom' } }
+                    plugins: { 
+                        legend: { 
+                            position: 'bottom',
+                            labels: {
+                                padding: 15,
+                                font: { size: 13 }
+                            }
+                        }
+                    }
                 }
             });
         }
 
-        // ==================== UTILIDADES ====================
         function filterReviews(reviews) {
             if (currentFilter === 'all') return reviews;
             if (currentFilter === 'parent' || currentFilter === 'teacher') {
@@ -2600,7 +2820,7 @@
                                 userType: 'parent',
                                 isAnonymous: false,
                                 rating: 5,
-                                comment: 'Excelente nivel académico. Mis hijos están muy felices y han aprendido mucho. Los profesores son dedicados.',
+                                comment: 'Excelente nivel académico. Mis hijos están muy felices y han aprendido mucho. Los profesores son muy dedicados y el ambiente es maravilloso.',
                                 recommendStudy: true,
                                 recommendWork: false,
                                 date: '15/01/2024',
@@ -2613,19 +2833,19 @@
                                         id: 101,
                                         userName: 'Pedro Ramírez',
                                         userId: 998,
-                                        text: 'Totalmente de acuerdo! Mi hijo también estudia ahí.',
+                                        text: 'Totalmente de acuerdo! Mi hijo también estudia ahí y está feliz.',
                                         date: '16/01/2024'
                                     }
                                 ]
                             },
                             {
                                 id: 2,
-                                userName: 'Anónimo',
+                                userName: 'Usuario Anónimo',
                                 userId: 997,
                                 userType: 'teacher',
                                 isAnonymous: true,
                                 rating: 4,
-                                comment: 'Buen ambiente laboral, aunque el salario podría mejorar. La dirección es comprensiva.',
+                                comment: 'Buen ambiente laboral, aunque el salario podría mejorar. La dirección es comprensiva y valora el trabajo docente.',
                                 recommendStudy: true,
                                 recommendWork: true,
                                 date: '10/01/2024',
