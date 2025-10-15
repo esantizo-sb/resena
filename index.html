@@ -1,0 +1,2651 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ReseñaEscolar - Evalúa Colegios</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* RESET Y BASE */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding: 10px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        @media (min-width: 768px) {
+            body {
+                padding: 20px;
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* HEADER */
+        header {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        @media (min-width: 768px) {
+            header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                padding: 20px 30px;
+                border-radius: 15px;
+                margin-bottom: 30px;
+            }
+        }
+
+        .header-left {
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .header-left {
+                flex: 1;
+                text-align: left;
+            }
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 5px;
+            word-wrap: break-word;
+        }
+
+        @media (min-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        @media (min-width: 768px) {
+            .subtitle {
+                font-size: 1em;
+            }
+        }
+
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .header-right {
+                flex-direction: row;
+                gap: 15px;
+                width: auto;
+            }
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            background: #f0f0f0;
+            border-radius: 25px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        @media (min-width: 768px) {
+            .user-info {
+                width: auto;
+            }
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1em;
+            flex-shrink: 0;
+        }
+
+        @media (min-width: 768px) {
+            .user-avatar {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2em;
+            }
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+            width: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        @media (min-width: 768px) {
+            .logout-btn {
+                width: auto;
+                padding: 8px 15px;
+            }
+        }
+
+        .logout-btn:hover,
+        .logout-btn:active {
+            background: #c82333;
+            transform: scale(1.05);
+        }
+
+        /* BÚSQUEDA */
+        .search-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .search-section {
+                padding: 25px;
+                border-radius: 15px;
+                margin-bottom: 30px;
+            }
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 15px;
+            transition: all 0.3s;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        @media (min-width: 768px) {
+            .search-input {
+                padding: 15px 50px 15px 20px;
+                font-size: 16px;
+            }
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.3em;
+            color: #667eea;
+            pointer-events: none;
+        }
+
+        @media (min-width: 768px) {
+            .search-icon {
+                right: 20px;
+                font-size: 1.5em;
+            }
+        }
+
+        .search-results {
+            margin-top: 15px;
+            display: none;
+            max-height: 400px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .search-result-item {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .search-result-item:hover,
+        .search-result-item:active {
+            background: #e9ecef;
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .search-result-content {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        @media (min-width: 768px) {
+            .search-result-content {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: start;
+            }
+        }
+
+        .search-result-info {
+            flex: 1;
+        }
+
+        .search-result-info h4 {
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 1em;
+        }
+
+        @media (min-width: 768px) {
+            .search-result-info h4 {
+                font-size: 1.1em;
+            }
+        }
+
+        .search-result-info p {
+            color: #666;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+        }
+
+        .search-result-details {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-top: 8px;
+        }
+
+        @media (min-width: 768px) {
+            .search-result-details {
+                flex-direction: row;
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+        }
+
+        .search-result-detail {
+            font-size: 0.8em;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .search-result-rating {
+            text-align: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        @media (min-width: 768px) {
+            .search-result-rating {
+                text-align: right;
+                background: transparent;
+                padding: 0;
+            }
+        }
+
+        .search-rating-number {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        @media (min-width: 768px) {
+            .search-rating-number {
+                font-size: 1.5em;
+            }
+        }
+
+        .search-rating-stars {
+            color: #ffd700;
+            font-size: 0.85em;
+        }
+
+        @media (min-width: 768px) {
+            .search-rating-stars {
+                font-size: 0.9em;
+            }
+        }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 20px auto;
+            padding: 0;
+            border-radius: 15px;
+            width: calc(100% - 20px);
+            max-width: 450px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+        }
+
+        @media (min-width: 768px) {
+            .modal-content {
+                margin: 5% auto;
+                width: 90%;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px 15px 0 0;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .modal-header {
+                padding: 25px;
+            }
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.5em;
+            padding-right: 40px;
+        }
+
+        @media (min-width: 768px) {
+            .modal-header h2 {
+                font-size: 1.8em;
+            }
+        }
+
+        .close {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        @media (min-width: 768px) {
+            .close {
+                right: 20px;
+                top: 20px;
+            }
+        }
+
+        .close:hover,
+        .close:active {
+            background: rgba(255,255,255,0.2);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .modal-body {
+                padding: 30px;
+            }
+        }
+
+        .tab-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .tab-btn {
+            padding: 12px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        @media (min-width: 768px) {
+            .tab-btn {
+                font-size: 16px;
+            }
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        @media (min-width: 768px) {
+            .form-group {
+                margin-bottom: 20px;
+            }
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s;
+            font-family: inherit;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        @media (min-width: 768px) {
+            input, textarea, select {
+                font-size: 14px;
+            }
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 35px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        button[type="submit"], .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button[type="submit"]:hover,
+        button[type="submit"]:active,
+        .btn-primary:hover,
+        .btn-primary:active {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 1024px) {
+            .main-content {
+                grid-template-columns: 400px 1fr;
+                align-items: start;
+            }
+        }
+
+        /* FORMULARIO - PANEL IZQUIERDO MEJORADO */
+        .form-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            height: auto;
+        }
+
+        @media (min-width: 768px) {
+            .form-section {
+                border-radius: 15px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .form-section {
+                position: -webkit-sticky;
+                position: sticky;
+                top: 20px;
+                max-height: calc(100vh - 40px);
+                overflow: hidden;
+            }
+        }
+
+        .form-section h2 {
+            color: #667eea;
+            font-size: 1.3em;
+            padding: 20px;
+            margin: 0;
+            border-bottom: 2px solid #f0f0f0;
+            flex-shrink: 0;
+        }
+
+        @media (min-width: 768px) {
+            .form-section h2 {
+                font-size: 1.5em;
+                padding: 25px;
+            }
+        }
+
+        .form-content-wrapper {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            padding: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .form-content-wrapper {
+                padding: 25px;
+            }
+        }
+
+        /* Scrollbar personalizado para el formulario */
+        .form-content-wrapper::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .form-content-wrapper::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .form-content-wrapper::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        .form-content-wrapper::-webkit-scrollbar-thumb:hover {
+            background: #5568d3;
+        }
+
+        .form-button-container {
+            padding: 15px 20px;
+            background: white;
+            border-top: 2px solid #f0f0f0;
+            flex-shrink: 0;
+            position: sticky;
+            bottom: 0;
+            z-index: 10;
+        }
+
+        @media (min-width: 768px) {
+            .form-button-container {
+                padding: 20px 25px;
+            }
+        }
+
+        .selected-school-badge {
+            background: #e7f3ff;
+            border: 2px solid #667eea;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .selected-school-badge.show {
+            display: block;
+        }
+
+        .selected-school-badge strong {
+            color: #667eea;
+            font-size: 0.9em;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .selected-school-badge span {
+            font-size: 0.95em;
+        }
+
+        .selected-school-badge button {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8em;
+            margin-top: 8px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .school-info-fields {
+            display: none;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .school-info-fields.show {
+            display: block;
+        }
+
+        .school-info-fields h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1em;
+        }
+
+        @media (min-width: 768px) {
+            .school-info-fields h4 {
+                font-size: 1.1em;
+            }
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        @media (min-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+        }
+
+        @media (min-width: 768px) {
+            .star-rating {
+                justify-content: flex-start;
+            }
+        }
+
+        .star {
+            font-size: 28px;
+            cursor: pointer;
+            color: #ddd;
+            transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .star {
+                font-size: 30px;
+            }
+        }
+
+        .star:hover,
+        .star:active,
+        .star.active {
+            color: #ffd700;
+            transform: scale(1.1);
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .anonymous-option {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .anonymous-option label {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 0.95em;
+        }
+
+        .anonymous-option input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* RESEÑAS */
+        .reviews-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .filters {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        @media (min-width: 768px) {
+            .filters {
+                padding: 20px;
+                border-radius: 15px;
+            }
+        }
+
+        .filters h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        @media (min-width: 768px) {
+            .filters h3 {
+                font-size: 1.2em;
+            }
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        @media (min-width: 768px) {
+            .filter-buttons {
+                gap: 10px;
+            }
+        }
+
+        .filter-btn {
+            padding: 8px 12px;
+            background: #f0f0f0;
+            border: 2px solid #e0e0e0;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 13px;
+            -webkit-tap-highlight-color: transparent;
+            white-space: nowrap;
+        }
+
+        @media (min-width: 768px) {
+            .filter-btn {
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+        }
+
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .filter-btn:hover,
+        .filter-btn:active {
+            transform: translateY(-2px);
+        }
+
+        /* TARJETAS */
+        .school-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        @media (min-width: 768px) {
+            .school-card {
+                padding: 25px;
+                border-radius: 15px;
+            }
+        }
+
+        .school-header {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        @media (min-width: 768px) {
+            .school-header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: start;
+            }
+        }
+
+        .school-name {
+            font-size: 1.4em;
+            color: #333;
+            font-weight: 700;
+            word-wrap: break-word;
+        }
+
+        @media (min-width: 768px) {
+            .school-name {
+                font-size: 1.8em;
+            }
+        }
+
+        .school-location {
+            color: #666;
+            font-size: 0.85em;
+            margin-top: 5px;
+        }
+
+        @media (min-width: 768px) {
+            .school-location {
+                font-size: 0.9em;
+            }
+        }
+
+        .overall-rating {
+            text-align: center;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        @media (min-width: 768px) {
+            .overall-rating {
+                text-align: right;
+                background: transparent;
+                padding: 0;
+            }
+        }
+
+        .rating-number {
+            font-size: 2em;
+            color: #667eea;
+            font-weight: 700;
+        }
+
+        @media (min-width: 768px) {
+            .rating-number {
+                font-size: 2.5em;
+            }
+        }
+
+        .stars-display {
+            color: #ffd700;
+            font-size: 1em;
+        }
+
+        @media (min-width: 768px) {
+            .stars-display {
+                font-size: 1.2em;
+            }
+        }
+
+        .school-contact-info {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        @media (min-width: 768px) {
+            .school-contact-info {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 15px;
+            }
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: start;
+            gap: 8px;
+            font-size: 0.85em;
+            color: #555;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        @media (min-width: 768px) {
+            .contact-item {
+                font-size: 0.9em;
+            }
+        }
+
+        .contact-item strong {
+            color: #667eea;
+            flex-shrink: 0;
+        }
+
+        .contact-item a {
+            color: #667eea;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .contact-item a:hover,
+        .contact-item a:active {
+            text-decoration: underline;
+        }
+
+        /* ESTADÍSTICAS */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        @media (min-width: 768px) {
+            .stats {
+                gap: 10px;
+            }
+        }
+
+        .stat-box {
+            background: #f8f9fa;
+            padding: 12px 8px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .stat-box {
+                padding: 15px;
+            }
+        }
+
+        .stat-number {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        @media (min-width: 768px) {
+            .stat-number {
+                font-size: 1.5em;
+            }
+        }
+
+        .stat-label {
+            font-size: 0.75em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        @media (min-width: 768px) {
+            .stat-label {
+                font-size: 0.85em;
+            }
+        }
+
+        /* GRÁFICOS */
+        .charts-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        @media (min-width: 768px) {
+            .charts-container {
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+        }
+
+        .chart-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        @media (min-width: 768px) {
+            .chart-box {
+                padding: 20px;
+            }
+        }
+
+        .chart-box h4 {
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 0.95em;
+        }
+
+        @media (min-width: 768px) {
+            .chart-box h4 {
+                font-size: 1em;
+            }
+        }
+
+        .chart-canvas {
+            max-height: 200px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-canvas {
+                max-height: 250px;
+            }
+        }
+
+        /* COMENTARIOS */
+        .comments-section {
+            margin-top: 20px;
+        }
+
+        .comments-section h3 {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        @media (min-width: 768px) {
+            .comments-section h3 {
+                font-size: 1.2em;
+            }
+        }
+
+        .comment {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s;
+        }
+
+        .comment.anonymous {
+            border-left-color: #ffc107;
+            background: #fffbf0;
+        }
+
+        .comment:active {
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .comment-header {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        @media (min-width: 768px) {
+            .comment-header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        .comment-author {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        .comment-date {
+            color: #999;
+            font-size: 0.8em;
+        }
+
+        @media (min-width: 768px) {
+            .comment-date {
+                font-size: 0.85em;
+            }
+        }
+
+        .comment-type {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.75em;
+            margin-right: 8px;
+        }
+
+        @media (min-width: 768px) {
+            .comment-type {
+                font-size: 0.8em;
+            }
+        }
+
+        .comment-type.teacher {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .comment-type.parent {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .comment-type.anonymous {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .comment-text {
+            color: #555;
+            line-height: 1.6;
+            margin: 10px 0;
+            font-size: 0.95em;
+            word-wrap: break-word;
+        }
+
+        .comment-rating {
+            color: #ffd700;
+            margin: 10px 0;
+            font-size: 0.95em;
+        }
+
+        .comment-footer {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        @media (min-width: 768px) {
+            .comment-footer {
+                gap: 15px;
+            }
+        }
+
+        .like-button,
+        .dislike-button,
+        .reply-button {
+            background: none;
+            border: 1px solid #e0e0e0;
+            color: #666;
+            cursor: pointer;
+            font-size: 0.85em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 12px;
+            border-radius: 20px;
+            transition: all 0.3s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        @media (min-width: 768px) {
+            .like-button,
+            .dislike-button,
+            .reply-button {
+                font-size: 0.9em;
+            }
+        }
+
+        .like-button:active,
+        .dislike-button:active,
+        .reply-button:active {
+            background: #f0f0f0;
+            transform: scale(1.05);
+        }
+
+        .like-button.liked {
+            color: #28a745;
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .dislike-button.disliked {
+            color: #dc3545;
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        /* RESPUESTAS */
+        .replies-section {
+            margin-top: 15px;
+            padding-left: 15px;
+            border-left: 2px solid #e0e0e0;
+        }
+
+        @media (min-width: 768px) {
+            .replies-section {
+                padding-left: 30px;
+            }
+        }
+
+        .reply {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .reply-header {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 8px;
+        }
+
+        @media (min-width: 768px) {
+            .reply-header {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+
+        .reply-author {
+            font-weight: 600;
+            color: #555;
+            font-size: 0.85em;
+        }
+
+        @media (min-width: 768px) {
+            .reply-author {
+                font-size: 0.9em;
+            }
+        }
+
+        .reply-date {
+            color: #999;
+            font-size: 0.75em;
+        }
+
+        @media (min-width: 768px) {
+            .reply-date {
+                font-size: 0.8em;
+            }
+        }
+
+        .reply-text {
+            color: #666;
+            font-size: 0.85em;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        @media (min-width: 768px) {
+            .reply-text {
+                font-size: 0.9em;
+            }
+        }
+
+        .reply-form {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .reply-form.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        .reply-form textarea {
+            margin-bottom: 10px;
+            min-height: 80px;
+        }
+
+        .reply-form-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .reply-form-buttons button {
+            padding: 10px;
+        }
+
+        .btn-cancel {
+            background: #6c757d;
+        }
+
+        .btn-cancel:hover,
+        .btn-cancel:active {
+            background: #5a6268;
+        }
+
+        .show-replies-btn {
+            background: none;
+            border: none;
+            color: #667eea;
+            cursor: pointer;
+            font-size: 0.8em;
+            padding: 5px 0;
+            margin-top: 10px;
+            font-weight: 600;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        @media (min-width: 768px) {
+            .show-replies-btn {
+                font-size: 0.85em;
+            }
+        }
+
+        .show-replies-btn:active {
+            text-decoration: underline;
+        }
+
+        /* ESTADO VACÍO */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        @media (min-width: 768px) {
+            .empty-state {
+                padding: 60px 20px;
+            }
+        }
+
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        @media (min-width: 768px) {
+            .empty-state svg {
+                width: 100px;
+                height: 100px;
+            }
+        }
+
+        .empty-state h3 {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        @media (min-width: 768px) {
+            .empty-state h3 {
+                font-size: 1.3em;
+            }
+        }
+
+        /* ALERTAS */
+        .alert {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            animation: slideIn 0.3s;
+            font-size: 0.9em;
+        }
+
+        @media (min-width: 768px) {
+            .alert {
+                padding: 15px 20px;
+                font-size: 1em;
+            }
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+
+        .login-prompt {
+            text-align: center;
+            padding: 30px 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        @media (min-width: 768px) {
+            .login-prompt {
+                padding: 40px;
+            }
+        }
+
+        .login-prompt h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        @media (min-width: 768px) {
+            .login-prompt h2 {
+                font-size: 1.5em;
+            }
+        }
+
+        .login-prompt p {
+            font-size: 0.95em;
+        }
+
+        .login-prompt button {
+            margin-top: 20px;
+            padding: 12px 30px;
+            width: auto;
+        }
+
+        small {
+            display: block;
+            margin-top: 5px;
+            color: #666;
+            font-size: 0.8em;
+        }
+
+        @media (min-width: 768px) {
+            small {
+                font-size: 0.85em;
+            }
+        }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5568d3;
+        }
+
+        /* MEJORAS DE ACCESIBILIDAD */
+        *:focus {
+            outline: 2px solid #667eea;
+            outline-offset: 2px;
+        }
+
+        button:focus,
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+        }
+
+        /* COMPATIBILIDAD CROSS-BROWSER */
+        @supports (-webkit-touch-callout: none) {
+            input, textarea, select {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <header>
+            <div class="header-left">
+                <h1>🏫 ReseñaEscolar</h1>
+                <p class="subtitle">Comparte tu experiencia y ayuda a otros a tomar mejores decisiones</p>
+            </div>
+            <div class="header-right" id="headerRight"></div>
+        </header>
+
+        <!-- BÚSQUEDA -->
+        <div class="search-section">
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="🔍 Buscar colegio...">
+                <span class="search-icon">🔍</span>
+            </div>
+            <div class="search-results" id="searchResults"></div>
+        </div>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <div id="mainContent"></div>
+    </div>
+
+    <!-- MODAL DE LOGIN/REGISTRO -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Bienvenido</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="switchTab('login')">Iniciar Sesión</button>
+                    <button class="tab-btn" onclick="switchTab('register')">Registrarse</button>
+                </div>
+
+                <!-- LOGIN -->
+                <div id="loginTab" class="tab-content active">
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="loginEmail" required placeholder="tu@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Contraseña</label>
+                            <input type="password" id="loginPassword" required placeholder="••••••••">
+                        </div>
+                        <button type="submit">Iniciar Sesión</button>
+                    </form>
+                </div>
+
+                <!-- REGISTRO -->
+                <div id="registerTab" class="tab-content">
+                    <form id="registerForm">
+                        <div class="form-group">
+                            <label>Nombre Completo</label>
+                            <input type="text" id="registerName" required placeholder="Juan Pérez">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="registerEmail" required placeholder="tu@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Contraseña</label>
+                            <input type="password" id="registerPassword" required placeholder="Mínimo 6 caracteres">
+                        </div>
+                        <div class="form-group">
+                            <label>Tipo de Usuario</label>
+                            <select id="registerUserType" required>
+                                <option value="">Selecciona...</option>
+                                <option value="parent">Padre/Madre</option>
+                                <option value="teacher">Profesor/Empleado</option>
+                            </select>
+                        </div>
+                        <button type="submit">Crear Cuenta</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== VARIABLES GLOBALES ====================
+        let currentUser = null;
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        let schools = JSON.parse(localStorage.getItem('schools')) || {};
+        let currentRating = 0;
+        let currentFilter = 'all';
+        let selectedSchool = null;
+
+        // ==================== INICIALIZACIÓN ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            loadSampleData();
+            initEventListeners();
+        });
+
+        function checkAuth() {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showMainApp();
+            } else {
+                showLoginPrompt();
+            }
+        }
+
+        function showLoginPrompt() {
+            document.getElementById('headerRight').innerHTML = `
+                <button onclick="openAuthModal()" style="padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 20px; cursor: pointer; font-weight: 600; width: 100%;">
+                    Iniciar Sesión / Registrarse
+                </button>
+            `;
+            
+            document.getElementById('mainContent').innerHTML = `
+                <div class="login-prompt">
+                    <h2>👋 Bienvenido a ReseñaEscolar</h2>
+                    <p style="color: #666; margin: 15px 0;">Para compartir y ver reseñas de colegios, por favor inicia sesión o crea una cuenta.</p>
+                    <button onclick="openAuthModal()">Comenzar</button>
+                </div>
+            `;
+        }
+
+        function showMainApp() {
+            document.getElementById('headerRight').innerHTML = `
+                <div class="user-info">
+                    <div class="user-avatar">${currentUser.name.charAt(0).toUpperCase()}</div>
+                    <div class="user-name">${currentUser.name}</div>
+                </div>
+                <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+            `;
+            
+            renderMainContent();
+        }
+
+        function openAuthModal() {
+            document.getElementById('authModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            if (tab === 'login') {
+                document.querySelector('.tab-btn:first-child').classList.add('active');
+                document.getElementById('loginTab').classList.add('active');
+            } else {
+                document.querySelector('.tab-btn:last-child').classList.add('active');
+                document.getElementById('registerTab').classList.add('active');
+            }
+        }
+
+        function initEventListeners() {
+            // Cerrar modal
+            document.querySelector('.close').onclick = closeAuthModal;
+            window.onclick = function(event) {
+                if (event.target == document.getElementById('authModal')) {
+                    closeAuthModal();
+                }
+            };
+
+            // Login
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+
+                const user = users.find(u => u.email === email && u.password === password);
+                
+                if (user) {
+                    currentUser = user;
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    closeAuthModal();
+                    showMainApp();
+                    showAlert('¡Bienvenido de nuevo!', 'success');
+                } else {
+                    showAlert('Email o contraseña incorrectos', 'error');
+                }
+            });
+
+            // Registro
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('registerName').value;
+                const email = document.getElementById('registerEmail').value;
+                const password = document.getElementById('registerPassword').value;
+                const userType = document.getElementById('registerUserType').value;
+
+                if (users.find(u => u.email === email)) {
+                    showAlert('Este email ya está registrado', 'error');
+                    return;
+                }
+
+                if (password.length < 6) {
+                    showAlert('La contraseña debe tener al menos 6 caracteres', 'error');
+                    return;
+                }
+
+                const newUser = {
+                    id: Date.now(),
+                    name,
+                    email,
+                    password,
+                    userType,
+                    joinDate: new Date().toLocaleDateString('es-ES')
+                };
+
+                users.push(newUser);
+                localStorage.setItem('users', JSON.stringify(users));
+                
+                currentUser = newUser;
+                localStorage.setItem('currentUser', JSON.stringify(newUser));
+                
+                closeAuthModal();
+                showMainApp();
+                showAlert('¡Cuenta creada exitosamente!', 'success');
+                
+                this.reset();
+            });
+
+            // Búsqueda
+            document.getElementById('searchInput').addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const resultsDiv = document.getElementById('searchResults');
+                
+                if (searchTerm.length < 2) {
+                    resultsDiv.style.display = 'none';
+                    return;
+                }
+
+                const results = Object.values(schools).filter(school => 
+                    school.name.toLowerCase().includes(searchTerm) || 
+                    school.location.toLowerCase().includes(searchTerm) ||
+                    school.address.toLowerCase().includes(searchTerm)
+                );
+
+                if (results.length > 0) {
+                    resultsDiv.innerHTML = results.map(school => {
+                        const avgRating = (school.reviews.reduce((sum, r) => sum + r.rating, 0) / school.reviews.length).toFixed(1);
+                        return `
+                            <div class="search-result-item" onclick='selectSchoolFromSearch(${JSON.stringify(school).replace(/'/g, "&apos;")})'>
+                                <div class="search-result-content">
+                                    <div class="search-result-info">
+                                        <h4>${school.name}</h4>
+                                        <p>📍 ${school.location}</p>
+                                        <div class="search-result-details">
+                                            <span class="search-result-detail">📌 ${school.address}</span>
+                                            ${school.phone ? `<span class="search-result-detail">📞 ${school.phone}</span>` : ''}
+                                        </div>
+                                        <p style="font-size: 0.85em; color: #999; margin-top: 5px;">${school.reviews.length} reseñas</p>
+                                    </div>
+                                    <div class="search-result-rating">
+                                        <div class="search-rating-number">${avgRating}</div>
+                                        <div class="search-rating-stars">${'★'.repeat(Math.round(avgRating))}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                    resultsDiv.style.display = 'block';
+                } else {
+                    resultsDiv.innerHTML = '<div class="search-result-item"><p style="color: #999;">No se encontraron colegios</p></div>';
+                    resultsDiv.style.display = 'block';
+                }
+            });
+        }
+
+        // ==================== SELECCIÓN DE COLEGIO ====================
+        function selectSchoolFromSearch(school) {
+            selectedSchool = school;
+            
+            document.getElementById('schoolName').value = school.name;
+            document.getElementById('location').value = school.location;
+            document.getElementById('schoolName').readOnly = true;
+            document.getElementById('location').readOnly = true;
+            
+            document.querySelector('.school-info-fields').classList.remove('show');
+            
+            const badge = document.querySelector('.selected-school-badge');
+            badge.classList.add('show');
+            document.getElementById('selectedSchoolName').textContent = school.name;
+            
+            document.getElementById('searchResults').style.display = 'none';
+            document.getElementById('searchInput').value = '';
+            
+            document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
+            
+            showAlert(`Seleccionado: ${school.name}. Ahora puedes agregar tu reseña.`, 'success');
+        }
+
+        function clearSelectedSchool() {
+            selectedSchool = null;
+            document.getElementById('schoolName').value = '';
+            document.getElementById('location').value = '';
+            document.getElementById('schoolName').readOnly = false;
+            document.getElementById('location').readOnly = false;
+            document.querySelector('.selected-school-badge').classList.remove('show');
+            checkIfNewSchool();
+        }
+
+        function checkIfNewSchool() {
+            const schoolName = document.getElementById('schoolName').value;
+            const schoolKey = schoolName.toLowerCase().replace(/\s+/g, '-');
+            const schoolInfoFields = document.querySelector('.school-info-fields');
+            
+            if (schoolName && !schools[schoolKey] && !selectedSchool) {
+                schoolInfoFields.classList.add('show');
+            } else {
+                schoolInfoFields.classList.remove('show');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            selectedSchool = null;
+            showLoginPrompt();
+            showAlert('Sesión cerrada correctamente', 'success');
+        }
+
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+            
+            document.querySelector('.container').insertBefore(alertDiv, document.querySelector('header').nextSibling);
+            
+            setTimeout(() => alertDiv.remove(), 3000);
+        }
+
+        // ==================== RENDERIZADO PRINCIPAL ====================
+        function renderMainContent() {
+            document.getElementById('mainContent').innerHTML = `
+                <div class="main-content">
+                    <!-- FORMULARIO CON ESTRUCTURA MEJORADA -->
+                    <div class="form-section">
+                        <h2>📝 Agregar Reseña</h2>
+                        
+                        <div class="form-content-wrapper">
+                            <div class="selected-school-badge">
+                                <strong>🏫 Colegio seleccionado:</strong>
+                                <span id="selectedSchoolName"></span>
+                                <button onclick="clearSelectedSchool()">✕ Cambiar</button>
+                            </div>
+                            
+                            <form id="reviewForm">
+                                <div class="form-group">
+                                    <label>Nombre del Colegio *</label>
+                                    <input type="text" id="schoolName" required oninput="checkIfNewSchool()">
+                                    <small>💡 Usa la búsqueda arriba para seleccionar un colegio existente</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Ciudad/Ubicación *</label>
+                                    <input type="text" id="location" required placeholder="Ej: Buenos Aires, Argentina">
+                                </div>
+
+                                <!-- INFORMACIÓN DEL COLEGIO -->
+                                <div class="school-info-fields">
+                                    <h4>📋 Información del Colegio</h4>
+                                    <small style="color: #666; margin-bottom: 15px;">Este parece ser un colegio nuevo. Por favor completa la información.</small>
+                                    
+                                    <div class="form-group">
+                                        <label>Dirección Completa *</label>
+                                        <input type="text" id="schoolAddress" placeholder="Calle, número, colonia">
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Teléfono</label>
+                                            <input type="tel" id="schoolPhone" placeholder="+54 11 1234-5678">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Correo Electrónico</label>
+                                            <input type="email" id="schoolEmail" placeholder="contacto@colegio.com">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Calificación General *</label>
+                                    <div class="star-rating" id="starRating">
+                                        <span class="star" data-rating="1">★</span>
+                                        <span class="star" data-rating="2">★</span>
+                                        <span class="star" data-rating="3">★</span>
+                                        <span class="star" data-rating="4">★</span>
+                                        <span class="star" data-rating="5">★</span>
+                                    </div>
+                                    <input type="hidden" id="rating" required>
+                                </div>
+
+                                <div class="form-group checkbox-group">
+                                    <label>Recomendaciones:</label>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="recommendStudy">
+                                        <label for="recommendStudy">✅ Recomiendo estudiar aquí</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="recommendWork">
+                                        <label for="recommendWork">💼 Recomiendo trabajar aquí</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Tu Opinión *</label>
+                                    <textarea id="comment" placeholder="Comparte tu experiencia..." required></textarea>
+                                </div>
+
+                                <div class="anonymous-option">
+                                    <label>
+                                        <input type="checkbox" id="postAnonymous">
+                                        <span>🕶️ Publicar de forma anónima</span>
+                                    </label>
+                                    <small>Tu identidad no será visible para otros usuarios</small>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <!-- BOTÓN SIEMPRE VISIBLE -->
+                        <div class="form-button-container">
+                            <button type="submit" form="reviewForm">Publicar Reseña</button>
+                        </div>
+                    </div>
+
+                    <!-- RESEÑAS -->
+                    <div class="reviews-section">
+                        <div class="filters">
+                            <h3>🔍 Filtrar por:</h3>
+                            <div class="filter-buttons">
+                                <button class="filter-btn active" data-filter="all">Todos</button>
+                                <button class="filter-btn" data-filter="parent">Padres</button>
+                                <button class="filter-btn" data-filter="teacher">Profesores</button>
+                                <button class="filter-btn" data-filter="5">5 ⭐</button>
+                                <button class="filter-btn" data-filter="recommended">Recomendados</button>
+                            </div>
+                        </div>
+
+                        <div id="reviewsList"></div>
+                    </div>
+                </div>
+            `;
+
+            initFormEvents();
+            initFilterEvents();
+            renderReviews();
+        }
+
+        function initFormEvents() {
+            // Sistema de estrellas
+            document.querySelectorAll('.star').forEach(star => {
+                const handleStarClick = function() {
+                    currentRating = parseInt(this.dataset.rating);
+                    document.getElementById('rating').value = currentRating;
+                    updateStars();
+                };
+
+                star.addEventListener('click', handleStarClick);
+                star.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                    handleStarClick.call(this);
+                });
+
+                star.addEventListener('mouseenter', function() {
+                    const rating = parseInt(this.dataset.rating);
+                    document.querySelectorAll('.star').forEach((s, index) => {
+                        s.style.color = index < rating ? '#ffd700' : '#ddd';
+                    });
+                });
+            });
+
+            document.getElementById('starRating').addEventListener('mouseleave', updateStars);
+
+            // Enviar reseña
+            document.getElementById('reviewForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const schoolName = document.getElementById('schoolName').value;
+                const location = document.getElementById('location').value;
+                const rating = parseInt(document.getElementById('rating').value);
+                const comment = document.getElementById('comment').value;
+                const recommendStudy = document.getElementById('recommendStudy').checked;
+                const recommendWork = document.getElementById('recommendWork').checked;
+                const isAnonymous = document.getElementById('postAnonymous').checked;
+
+                if (!rating) {
+                    showAlert('Por favor selecciona una calificación', 'error');
+                    return;
+                }
+
+                const schoolKey = schoolName.toLowerCase().replace(/\s+/g, '-');
+
+                if (!schools[schoolKey] && !selectedSchool) {
+                    const address = document.getElementById('schoolAddress').value;
+                    const phone = document.getElementById('schoolPhone').value;
+                    const email = document.getElementById('schoolEmail').value;
+
+                    if (!address) {
+                        showAlert('Por favor completa la dirección del colegio', 'error');
+                        return;
+                    }
+
+                    schools[schoolKey] = {
+                        name: schoolName,
+                        location: location,
+                        address: address,
+                        phone: phone,
+                        email: email,
+                        reviews: [],
+                        stats: {
+                            recommendStudy: 0,
+                            recommendWork: 0,
+                            totalReviews: 0
+                        }
+                    };
+                }
+
+                if (!schools[schoolKey] && selectedSchool) {
+                    schools[schoolKey] = selectedSchool;
+                }
+
+                const review = {
+                    id: Date.now(),
+                    userName: isAnonymous ? 'Anónimo' : currentUser.name,
+                    userId: currentUser.id,
+                    userType: currentUser.userType,
+                    isAnonymous: isAnonymous,
+                    rating,
+                    comment,
+                    recommendStudy,
+                    recommendWork,
+                    date: new Date().toLocaleDateString('es-ES'),
+                    likes: 0,
+                    dislikes: 0,
+                    likedBy: [],
+                    dislikedBy: [],
+                    replies: []
+                };
+
+                schools[schoolKey].reviews.unshift(review);
+                schools[schoolKey].stats.totalReviews++;
+                if (recommendStudy) schools[schoolKey].stats.recommendStudy++;
+                if (recommendWork) schools[schoolKey].stats.recommendWork++;
+
+                localStorage.setItem('schools', JSON.stringify(schools));
+
+                this.reset();
+                currentRating = 0;
+                updateStars();
+                clearSelectedSchool();
+
+                renderReviews();
+                showAlert('¡Reseña publicada exitosamente!', 'success');
+                
+                setTimeout(() => {
+                    const firstCard = document.querySelector('.school-card');
+                    if (firstCard) {
+                        firstCard.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }, 100);
+            });
+        }
+
+        function initFilterEvents() {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.dataset.filter;
+                    renderReviews();
+                });
+            });
+        }
+
+        function updateStars() {
+            document.querySelectorAll('.star').forEach((s, index) => {
+                s.classList.toggle('active', index < currentRating);
+            });
+        }
+
+        // ==================== RESPUESTAS ====================
+        function toggleReplyForm(reviewId) {
+            const form = document.getElementById(`replyForm-${reviewId}`);
+            if (form) {
+                form.classList.toggle('show');
+                if (form.classList.contains('show')) {
+                    const textarea = form.querySelector('textarea');
+                    textarea.focus();
+                    setTimeout(() => {
+                        form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 100);
+                }
+            }
+        }
+
+        function submitReply(reviewId) {
+            const textarea = document.getElementById(`replyText-${reviewId}`);
+            const replyText = textarea.value.trim();
+
+            if (!replyText) {
+                showAlert('Por favor escribe un comentario', 'error');
+                return;
+            }
+
+            Object.values(schools).forEach(school => {
+                const review = school.reviews.find(r => r.id === reviewId);
+                if (review) {
+                    const reply = {
+                        id: Date.now(),
+                        userName: currentUser.name,
+                        userId: currentUser.id,
+                        text: replyText,
+                        date: new Date().toLocaleDateString('es-ES')
+                    };
+
+                    if (!review.replies) {
+                        review.replies = [];
+                    }
+
+                    review.replies.push(reply);
+                    localStorage.setItem('schools', JSON.stringify(schools));
+                    
+                    renderReviews();
+                    showAlert('Comentario agregado correctamente', 'success');
+                }
+            });
+        }
+
+        function cancelReply(reviewId) {
+            const form = document.getElementById(`replyForm-${reviewId}`);
+            if (form) {
+                form.classList.remove('show');
+                form.querySelector('textarea').value = '';
+            }
+        }
+
+        function toggleReplies(reviewId) {
+            const repliesSection = document.getElementById(`replies-${reviewId}`);
+            const btn = document.getElementById(`toggleBtn-${reviewId}`);
+            
+            if (repliesSection) {
+                const isHidden = repliesSection.style.display === 'none';
+                repliesSection.style.display = isHidden ? 'block' : 'none';
+                
+                const review = findReviewById(reviewId);
+                if (review && review.replies) {
+                    btn.textContent = isHidden
+                        ? `▲ Ocultar respuestas`
+                        : `▼ Ver ${review.replies.length} respuesta${review.replies.length !== 1 ? 's' : ''}`;
+                }
+            }
+        }
+
+        function findReviewById(reviewId) {
+            for (let school of Object.values(schools)) {
+                const review = school.reviews.find(r => r.id === reviewId);
+                if (review) return review;
+            }
+            return null;
+        }
+
+        // ==================== RENDERIZADO ====================
+        function renderReviews() {
+            const container = document.getElementById('reviewsList');
+            container.innerHTML = '';
+
+            if (Object.keys(schools).length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+                        </svg>
+                        <h3>No hay reseñas todavía</h3>
+                        <p>Sé el primero en compartir tu experiencia</p>
+                    </div>
+                `;
+                return;
+            }
+
+            Object.values(schools).forEach(school => {
+                const filteredReviews = filterReviews(school.reviews);
+                
+                if (filteredReviews.length === 0) return;
+
+                const avgRating = (school.reviews.reduce((sum, r) => sum + r.rating, 0) / school.reviews.length).toFixed(1);
+                const studyPercent = ((school.stats.recommendStudy / school.stats.totalReviews) * 100).toFixed(0);
+                const workPercent = ((school.stats.recommendWork / school.stats.totalReviews) * 100).toFixed(0);
+
+                const totalLikes = school.reviews.reduce((sum, r) => sum + r.likes, 0);
+                const totalDislikes = school.reviews.reduce((sum, r) => sum + r.dislikes, 0);
+
+                const schoolCard = document.createElement('div');
+                schoolCard.className = 'school-card';
+                schoolCard.innerHTML = `
+                    <div class="school-header">
+                        <div>
+                            <div class="school-name">${school.name}</div>
+                            <div class="school-location">📍 ${school.location}</div>
+                        </div>
+                        <div class="overall-rating">
+                            <div class="rating-number">${avgRating}</div>
+                            <div class="stars-display">${'★'.repeat(Math.round(avgRating))}</div>
+                        </div>
+                    </div>
+
+                    <div class="school-contact-info">
+                        <div class="contact-item">
+                            <strong>📌</strong> <span>${school.address}</span>
+                        </div>
+                        ${school.phone ? `
+                            <div class="contact-item">
+                                <strong>📞</strong> <a href="tel:${school.phone}">${school.phone}</a>
+                            </div>
+                        ` : ''}
+                        ${school.email ? `
+                            <div class="contact-item">
+                                <strong>📧</strong> <a href="mailto:${school.email}">${school.email}</a>
+                            </div>
+                        ` : ''}
+                    </div>
+
+                    <div class="stats">
+                        <div class="stat-box">
+                            <div class="stat-number">${school.stats.totalReviews}</div>
+                            <div class="stat-label">Reseñas</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">${studyPercent}%</div>
+                            <div class="stat-label">Recomiendan estudiar</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">${workPercent}%</div>
+                            <div class="stat-label">Recomiendan trabajar</div>
+                        </div>
+                    </div>
+
+                    <div class="charts-container">
+                        <div class="chart-box">
+                            <h4>📊 Calificaciones</h4>
+                            <canvas id="ratingsChart-${school.name.replace(/\s+/g, '-')}" class="chart-canvas"></canvas>
+                        </div>
+                        <div class="chart-box">
+                            <h4>👍👎 Likes/Dislikes</h4>
+                            <canvas id="likesChart-${school.name.replace(/\s+/g, '-')}" class="chart-canvas"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="comments-section">
+                        <h3>💬 Opiniones (${filteredReviews.length})</h3>
+                        ${filteredReviews.map(review => renderReview(review)).join('')}
+                    </div>
+                `;
+
+                container.appendChild(schoolCard);
+
+                setTimeout(() => {
+                    createRatingsChart(school);
+                    createLikesChart(school, totalLikes, totalDislikes);
+                }, 100);
+            });
+        }
+
+        function renderReview(review) {
+            const repliesCount = review.replies ? review.replies.length : 0;
+            const hasReplies = repliesCount > 0;
+            const isAnonymous = review.isAnonymous || false;
+
+            return `
+                <div class="comment ${isAnonymous ? 'anonymous' : ''}">
+                    <div class="comment-header">
+                        <div>
+                            ${isAnonymous ? 
+                                '<span class="comment-type anonymous">🕶️ Anónimo</span>' :
+                                `<span class="comment-type ${review.userType}">${review.userType === 'parent' ? '👨‍👩‍👧 Padre' : '👨‍🏫 Profesor'}</span>`
+                            }
+                            <span class="comment-author">${review.userName}</span>
+                        </div>
+                        <span class="comment-date">${review.date}</span>
+                    </div>
+                    <div class="comment-rating">${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</div>
+                    <div class="comment-text">${review.comment}</div>
+                    ${review.recommendStudy || review.recommendWork ? `
+                        <div style="margin: 10px 0; color: #28a745; font-size: 0.85em;">
+                            ${review.recommendStudy ? '✅ Recomienda estudiar ' : ''}
+                            ${review.recommendWork ? '✅ Recomienda trabajar' : ''}
+                        </div>
+                    ` : ''}
+                    
+                    <div class="comment-footer">
+                        <button class="like-button ${review.likedBy.includes(currentUser.id) ? 'liked' : ''}" onclick="toggleLike(${review.id}, true)">
+                            👍 ${review.likes}
+                        </button>
+                        <button class="dislike-button ${review.dislikedBy.includes(currentUser.id) ? 'disliked' : ''}" onclick="toggleLike(${review.id}, false)">
+                            👎 ${review.dislikes}
+                        </button>
+                        <button class="reply-button" onclick="toggleReplyForm(${review.id})">
+                            💬 ${repliesCount > 0 ? `(${repliesCount})` : 'Comentar'}
+                        </button>
+                    </div>
+
+                    <div class="reply-form" id="replyForm-${review.id}">
+                        <textarea id="replyText-${review.id}" placeholder="Escribe tu comentario..."></textarea>
+                        <div class="reply-form-buttons">
+                            <button class="btn-primary" onclick="submitReply(${review.id})">Enviar</button>
+                            <button class="btn-cancel" onclick="cancelReply(${review.id})">Cancelar</button>
+                        </div>
+                    </div>
+
+                    ${hasReplies ? `
+                        <button class="show-replies-btn" id="toggleBtn-${review.id}" onclick="toggleReplies(${review.id})">
+                            ▼ Ver ${repliesCount} respuesta${repliesCount !== 1 ? 's' : ''}
+                        </button>
+                        <div class="replies-section" id="replies-${review.id}" style="display: none;">
+                            ${review.replies.map(reply => `
+                                <div class="reply">
+                                    <div class="reply-header">
+                                        <span class="reply-author">👤 ${reply.userName}</span>
+                                        <span class="reply-date">${reply.date}</span>
+                                    </div>
+                                    <div class="reply-text">${reply.text}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        // ==================== GRÁFICOS ====================
+        function createRatingsChart(school) {
+            const ctx = document.getElementById(`ratingsChart-${school.name.replace(/\s+/g, '-')}`);
+            if (!ctx) return;
+
+            const ratingCounts = [0, 0, 0, 0, 0];
+            school.reviews.forEach(review => {
+                ratingCounts[review.rating - 1]++;
+            });
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['1⭐', '2⭐', '3⭐', '4⭐', '5⭐'],
+                    datasets: [{
+                        label: 'Cantidad',
+                        data: ratingCounts,
+                        backgroundColor: ['#dc3545', '#fd7e14', '#ffc107', '#28a745', '#20c997'],
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createLikesChart(school, totalLikes, totalDislikes) {
+            const ctx = document.getElementById(`likesChart-${school.name.replace(/\s+/g, '-')}`);
+            if (!ctx) return;
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['👍 Likes', '👎 Dislikes'],
+                    datasets: [{
+                        data: [totalLikes, totalDislikes],
+                        backgroundColor: ['#28a745', '#dc3545'],
+                        borderWidth: 3,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+        }
+
+        // ==================== UTILIDADES ====================
+        function filterReviews(reviews) {
+            if (currentFilter === 'all') return reviews;
+            if (currentFilter === 'parent' || currentFilter === 'teacher') {
+                return reviews.filter(r => r.userType === currentFilter);
+            }
+            if (currentFilter === '5') {
+                return reviews.filter(r => r.rating === 5);
+            }
+            if (currentFilter === 'recommended') {
+                return reviews.filter(r => r.recommendStudy || r.recommendWork);
+            }
+            return reviews;
+        }
+
+        function toggleLike(reviewId, isLike) {
+            Object.values(schools).forEach(school => {
+                const review = school.reviews.find(r => r.id === reviewId);
+                if (review) {
+                    if (isLike) {
+                        if (review.likedBy.includes(currentUser.id)) {
+                            review.likes--;
+                            review.likedBy = review.likedBy.filter(id => id !== currentUser.id);
+                        } else {
+                            review.likes++;
+                            review.likedBy.push(currentUser.id);
+                            if (review.dislikedBy.includes(currentUser.id)) {
+                                review.dislikes--;
+                                review.dislikedBy = review.dislikedBy.filter(id => id !== currentUser.id);
+                            }
+                        }
+                    } else {
+                        if (review.dislikedBy.includes(currentUser.id)) {
+                            review.dislikes--;
+                            review.dislikedBy = review.dislikedBy.filter(id => id !== currentUser.id);
+                        } else {
+                            review.dislikes++;
+                            review.dislikedBy.push(currentUser.id);
+                            if (review.likedBy.includes(currentUser.id)) {
+                                review.likes--;
+                                review.likedBy = review.likedBy.filter(id => id !== currentUser.id);
+                            }
+                        }
+                    }
+                    
+                    localStorage.setItem('schools', JSON.stringify(schools));
+                    renderReviews();
+                }
+            });
+        }
+
+        function loadSampleData() {
+            if (Object.keys(schools).length === 0) {
+                schools = {
+                    'colegio-san-martin': {
+                        name: 'Colegio San Martín',
+                        location: 'Buenos Aires, Argentina',
+                        address: 'Av. Libertador 1234, CABA',
+                        phone: '+54 11 4567-8900',
+                        email: 'info@colegiosanmartin.edu.ar',
+                        reviews: [
+                            {
+                                id: 1,
+                                userName: 'María González',
+                                userId: 999,
+                                userType: 'parent',
+                                isAnonymous: false,
+                                rating: 5,
+                                comment: 'Excelente nivel académico. Mis hijos están muy felices y han aprendido mucho. Los profesores son dedicados.',
+                                recommendStudy: true,
+                                recommendWork: false,
+                                date: '15/01/2024',
+                                likes: 12,
+                                dislikes: 1,
+                                likedBy: [],
+                                dislikedBy: [],
+                                replies: [
+                                    {
+                                        id: 101,
+                                        userName: 'Pedro Ramírez',
+                                        userId: 998,
+                                        text: 'Totalmente de acuerdo! Mi hijo también estudia ahí.',
+                                        date: '16/01/2024'
+                                    }
+                                ]
+                            },
+                            {
+                                id: 2,
+                                userName: 'Anónimo',
+                                userId: 997,
+                                userType: 'teacher',
+                                isAnonymous: true,
+                                rating: 4,
+                                comment: 'Buen ambiente laboral, aunque el salario podría mejorar. La dirección es comprensiva.',
+                                recommendStudy: true,
+                                recommendWork: true,
+                                date: '10/01/2024',
+                                likes: 8,
+                                dislikes: 2,
+                                likedBy: [],
+                                dislikedBy: [],
+                                replies: []
+                            }
+                        ],
+                        stats: { 
+                            recommendStudy: 2, 
+                            recommendWork: 1, 
+                            totalReviews: 2
+                        }
+                    }
+                };
+                localStorage.setItem('schools', JSON.stringify(schools));
+            }
+        }
+    </script>
+</body>
+</html>
